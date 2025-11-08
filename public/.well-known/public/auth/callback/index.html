@@ -1,0 +1,10 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>MindCar</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<p>Abriendo la app…</p>
+<script>
+  const qs = location.search || '';
+  // Fallback por si (escritorio) no hay App Link
+  location.href = 'mindcar://auth/callback' + qs;
+</script>
