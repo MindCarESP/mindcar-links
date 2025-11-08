@@ -1,10 +1,50 @@
-<!doctype html>
-<meta charset="utf-8">
-<title>MindCar</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<p>Abriendo la app…</p>
-<script>
-  const qs = location.search || '';
-  // Fallback por si (en escritorio) no hay App Link
-  location.href = 'mindcar://auth/callback' + qs;
-</script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cuenta activada - MindCar</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f7f9fa; margin:0; padding:0;">
+  <table align="center" width="100%" cellpadding="0" cellspacing="0"
+         style="max-width:600px;margin:40px auto;background:#ffffff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+    <tr>
+      <td style="background:#03BCBF;padding:20px;text-align:center;border-radius:8px 8px 0 0;">
+        <h1 style="color:#fff;margin:0;font-size:24px;">MindCar</h1>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:30px;color:#333;text-align:center;">
+        <h2 style="color:#03BCBF;">Cuenta activada</h2>
+        <p style="font-size:15px;line-height:1.5;">
+          Tu cuenta ha sido activada correctamente. 🎉<br><br>
+          Ahora puedes volver a la aplicación <strong>MindCar</strong> e iniciar sesión.
+        </p>
+        <p style="margin:30px 0;">
+          <a href="#" onclick="redirectToApp()" 
+             style="background:#03BCBF;color:#fff;text-decoration:none;padding:12px 30px;border-radius:6px;font-size:16px;display:inline-block;">
+             Volver a MindCar
+          </a>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="background:#f0f0f0;padding:15px;text-align:center;border-radius:0 0 8px 8px;color:#777;font-size:12px;">
+        © 2025 MindCar — Todos los derechos reservados.<br />
+        <a href="https://mindcar.es" style="color:#03BCBF;text-decoration:none;">mindcar.es</a>
+      </td>
+    </tr>
+  </table>
+
+  <script>
+    function redirectToApp() {
+      const qs = location.search || '';
+      // Fallback por si (en escritorio) no hay App Link
+      location.href = 'mindcar://auth/callback' + qs;
+    }
+
+    // Redirección automática tras un breve retraso (opcional)
+    setTimeout(redirectToApp, 1500);
+  </script>
+</body>
+</html>
