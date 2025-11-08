@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mindcar.code",
+      "sha256_cert_fingerprints": [
+        "A0:DE:A3:AB:A4:ED:C7:C4:C5:E4:A2:E4:CD:71:7E:F1:55:BE:47:4E:16:3D:70:A8:54:7C:9E:59:F2:4E:D3:DE"
+      ]
+    }
+  }
+]
