@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MindCar — En construcción</title>
   <style>
-    /* Reset */
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -43,6 +42,7 @@
     p {
       font-size: 1rem;
       color: #b0c4de;
+      margin-bottom: 0.5rem;
     }
 
     .loader {
@@ -70,19 +70,55 @@
       100% { left: -30%; }
     }
 
+    .donate {
+      margin-top: 2.5rem;
+      font-size: 0.9rem;
+      color: #9fbad0;
+      opacity: 0.9;
+    }
+
+    .donate a {
+      display: inline-block;
+      margin-top: 0.8rem;
+      padding: 0.6rem 1.2rem;
+      background: #00bcd4;
+      color: #fff;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0,188,212,0.3);
+    }
+
+    .donate a:hover {
+      background: #00a6bd;
+      box-shadow: 0 0 15px rgba(0,188,212,0.5);
+      transform: translateY(-2px);
+    }
+
     footer {
       position: absolute;
       bottom: 20px;
       font-size: 0.8rem;
       color: #708090;
+      opacity: 0.7;
     }
   </style>
 </head>
 <body>
-  <img src="/image2vector.svg" alt="MindCar logo" />
+  <img src="/logo-01.svg" alt="MindCar logo" />
   <h1>🚧 Estamos construyendo algo grande</h1>
   <p>Vuelve pronto para descubrir MindCar.</p>
+
   <div class="loader"></div>
+
+  <div class="donate">
+    <p>Si quieres apoyar este proyecto, puedes invitarme a un café ☕</p>
+    <a href="https://paypal.me/MindCar" target="_blank" rel="noopener">
+      Donar vía PayPal
+    </a>
+  </div>
+
   <footer>© 2025 MindCar</footer>
 </body>
 </html>
