@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+Put your HTML text here<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
@@ -35,18 +35,16 @@
       margin-inline:auto;
     }
 
-    /* LOGO FULL CENTRADO — menos espacio */
     .logo-full{
       width:min(340px, 75%);
-      margin:40px auto 20px; /* antes 60px y 40px */
+      margin:40px auto 20px;
       filter: drop-shadow(0 0 10px rgba(0,0,0,.35));
       transition: transform .25s ease;
     }
     .logo-full:hover{ transform:scale(1.02) }
 
-    /* CLAIM */
     .claim{
-      margin-top:10px; /* antes 22px */
+      margin-top:10px;
       display:grid; gap:12px;
       background: var(--card);
       border:1px solid var(--stroke);
@@ -57,7 +55,6 @@
     .claim h2{font-size: clamp(22px, 3.2vw, 34px); font-weight:800; margin:0}
     .claim p{color:var(--muted); max-width:66ch; margin:6px auto 0}
 
-    /* BOTÓN */
     .support-cta{ margin-top:22px; display:flex; justify-content:center }
     .btn-support{
       appearance:none; border: 3px solid #0b3a35; cursor:pointer;
@@ -71,7 +68,6 @@
     .btn-support:hover{ transform: translateY(-2px) }
     .btn-support:active{ transform: translateY(0) scale(.99) }
 
-    /* CONTACTO */
     .contact{
       margin-top:28px;
       font-size:15px;
@@ -85,6 +81,19 @@
     }
     .contact a:hover{ color:var(--brand-2); }
 
+    .note{
+      margin-top:24px;
+      color:var(--muted);
+      font-size:15px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      padding:16px 20px;
+      max-width:620px;
+      margin-inline:auto;
+      line-height:1.6;
+    }
+
     footer{
       margin:24px auto 8px;
       color:var(--muted);
@@ -96,10 +105,8 @@
 
 <body>
   <main class="wrap">
-    <!-- LOGO -->
     <img src="/logo-full-app.svg" alt="MindCar logo" class="logo-full" />
 
-    <!-- CLAIM -->
     <section class="claim">
       <h2>Porque los coches no son “de segunda mano”, <span style="color:var(--brand)">son tu primera historia</span>.</h2>
       <p>Estamos construyendo el <strong>buscador más funcional</strong> para comprar y vender coches: rápido, claro y útil.</p>
@@ -111,7 +118,11 @@
       </div>
     </section>
 
-    <!-- CONTACTO -->
+    <!-- NOTA DE DESARROLLO -->
+    <div class="note">
+      ⚙️ <strong>MindCar está en desarrollo:</strong> aún no está disponible públicamente, pero puedes seguir el proyecto y apoyar su crecimiento. Muy pronto podrás probar la app y descubrir una nueva forma como comprar y vender coches.
+    </div>
+
     <div class="contact">
       📧 Contacto: <a href="mailto:mindcar@mindcar.es">mindcar@mindcar.es</a>
     </div>
