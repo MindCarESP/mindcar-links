@@ -96,9 +96,19 @@
       color:var(--brand);
       text-decoration:none;
       font-weight:500;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
       transition: color .2s ease;
     }
     footer a:hover{ color:var(--brand-2); }
+
+    footer svg{
+      width:15px; height:15px;
+      fill:var(--brand);
+      transition: fill .2s ease;
+    }
+    footer a:hover svg{ fill:var(--brand-2); }
   </style>
 </head>
 
