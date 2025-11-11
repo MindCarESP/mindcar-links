@@ -17,7 +17,7 @@
     :root{
       --bg:#0b1220; --ink:#e8f1ff; --muted:#a6b9d4;
       --brand:#10b981; --brand-2:#06b6d4;
-      --card:#102332;  /* sólido, sin transparencia */
+      --card:#102332;
       --stroke:#0f2a3a; 
       --shadow: 0 10px 30px rgba(0,0,0,.25);
       --radius: 18px;
@@ -25,57 +25,78 @@
     *{box-sizing:border-box} html,body{height:100%}
     body{
       margin:0; color:var(--ink);
-      /* Fondo 100% opaco (sin rgba ni blur) */
       background: linear-gradient(180deg, #0a1622 0%, #0c1826 40%, #0b1220 100%);
       font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
       line-height:1.5; text-align:center;
     }
-    .wrap{max-width:960px; padding:clamp(16px, 3vw, 32px); margin-inline:auto}
+    .wrap{
+      max-width:960px;
+      padding:clamp(16px, 3vw, 24px);
+      margin-inline:auto;
+    }
 
-    /* LOGO FULL CENTRADO */
+    /* LOGO FULL CENTRADO — menos espacio */
     .logo-full{
-      width:min(380px, 80%);
-      margin:60px auto 40px;
-      filter: drop-shadow(0 0 12px rgba(0,0,0,.35));
+      width:min(340px, 75%);
+      margin:40px auto 20px; /* antes 60px y 40px */
+      filter: drop-shadow(0 0 10px rgba(0,0,0,.35));
       transition: transform .25s ease;
     }
     .logo-full:hover{ transform:scale(1.02) }
 
-    /* Claim: fondo sólido */
+    /* CLAIM */
     .claim{
-      margin-top:22px; display:grid; gap:12px;
-      background: var(--card);           /* sólido */
-      border:1px solid var(--stroke);    /* sólido */
+      margin-top:10px; /* antes 22px */
+      display:grid; gap:12px;
+      background: var(--card);
+      border:1px solid var(--stroke);
       border-radius: var(--radius);
-      padding: clamp(24px,3.5vw,36px);
+      padding: clamp(20px,3vw,28px);
       box-shadow: var(--shadow);
     }
-    .claim h2{font-size: clamp(22px, 3.2vw, 36px); font-weight:800; margin:0}
+    .claim h2{font-size: clamp(22px, 3.2vw, 34px); font-weight:800; margin:0}
     .claim p{color:var(--muted); max-width:66ch; margin:6px auto 0}
 
-    /* Botón único de apoyo, sin brillos/after */
-    .support-cta{ margin-top:28px; display:flex; justify-content:center }
+    /* BOTÓN */
+    .support-cta{ margin-top:22px; display:flex; justify-content:center }
     .btn-support{
       appearance:none; border: 3px solid #0b3a35; cursor:pointer;
-      padding:18px 28px; border-radius:18px;
-      font-weight:900; font-size:clamp(16px, 2.4vw, 22px); letter-spacing:.2px;
+      padding:16px 26px; border-radius:16px;
+      font-weight:900; font-size:clamp(16px, 2.2vw, 21px);
       color:#06141a; text-decoration:none;
       background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      box-shadow: 0 8px 18px rgba(0,0,0,.35);
+      box-shadow: 0 6px 16px rgba(0,0,0,.35);
       transition: transform .12s ease, filter .12s ease;
     }
     .btn-support:hover{ transform: translateY(-2px) }
     .btn-support:active{ transform: translateY(0) scale(.99) }
-    /* Eliminar completamente cualquier pseudo-elemento/glow */
-    .btn-support::after{ content:none }
 
-    footer{ margin:50px auto 8px; color:var(--muted); font-size:13px; text-align:center }
+    /* CONTACTO */
+    .contact{
+      margin-top:28px;
+      font-size:15px;
+      color:var(--muted);
+    }
+    .contact a{
+      color:var(--brand);
+      text-decoration:none;
+      font-weight:500;
+      transition: color .2s ease;
+    }
+    .contact a:hover{ color:var(--brand-2); }
+
+    footer{
+      margin:24px auto 8px;
+      color:var(--muted);
+      font-size:13px;
+      text-align:center;
+    }
   </style>
 </head>
 
 <body>
   <main class="wrap">
-    <!-- LOGO FULL -->
+    <!-- LOGO -->
     <img src="/logo-full-app.svg" alt="MindCar logo" class="logo-full" />
 
     <!-- CLAIM -->
@@ -89,6 +110,11 @@
         </a>
       </div>
     </section>
+
+    <!-- CONTACTO -->
+    <div class="contact">
+      📧 Contacto: <a href="mailto:mindcar@mindcar.es">mindcar@mindcar.es</a>
+    </div>
 
     <footer>© <span id="y"></span> MindCar · La app creada por y para los amantes del motor</footer>
   </main>
