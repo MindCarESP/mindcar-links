@@ -1,125 +1,261 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MindCar — En construcción</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MindCar — Tu primera historia</title>
+
+  <!-- SEO básico -->
+  <meta name="description" content="La app creada por y para los amantes del motor. Porque los coches no son de segunda mano: son tu primera historia.">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="MindCar — Tu primera historia">
+  <meta property="og:description" content="Conectamos a quienes entienden lo que hay bajo el capó.">
+  <meta property="og:image" content="/image2vector.svg">
+  <meta property="og:type" content="website">
+
+  <link rel="icon" href="/image2vector.svg">
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
-      color: #fff;
-      font-family: "Poppins", sans-serif;
-      text-align: center;
-      overflow: hidden;
+    :root{
+      --bg:#0b1220;
+      --ink:#e8f1ff;
+      --muted:#a6b9d4;
+      --brand:#10b981;   /* verde vivo */
+      --brand-2:#06b6d4; /* cian */
+      --card:#0f182b;
+      --stroke: rgba(255,255,255,.08);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
     }
 
-    img {
-      width: 160px;
-      height: auto;
-      margin-bottom: 2rem;
-      animation: float 4s ease-in-out infinite;
-      filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 420px at 80% -10%, rgba(16,185,129,.25), transparent 60%),
+        radial-gradient(900px 360px at 10% -10%, rgba(6,182,212,.25), transparent 55%),
+        linear-gradient(180deg, #0a1020, #0c1426 30%, #0b1220 100%);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Inter, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      line-height:1.5;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .wrap{
+      max-width:960px;
+      padding: clamp(16px, 3vw, 32px);
+      margin-inline:auto;
     }
 
-    h1 {
-      font-size: 2rem;
-      letter-spacing: 1px;
-      margin-bottom: 0.5rem;
+    /* Header / hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 92px 1fr;
+      gap:18px;
+      align-items:center;
+      background: color-mix(in srgb, var(--card) 92%, transparent);
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: saturate(140%) blur(6px);
+    }
+    .hero__logo{
+      width:92px;height:92px;border-radius:22px;overflow:hidden;
+      background:linear-gradient(135deg, rgba(16,185,129,.15), rgba(6,182,212,.15));
+      display:grid;place-items:center;border:1px solid var(--stroke)
+    }
+    .hero__logo img{width:66px;height:auto;display:block;filter: drop-shadow(0 2px 10px rgba(16,185,129,.35))}
+    .hero__title{font-size: clamp(28px, 4vw, 42px); line-height:1.1; letter-spacing:.3px}
+    .hero__location{
+      display:flex; gap:10px; align-items:center; color:var(--muted); margin-top:6px; font-size:14px
+    }
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      border:1px solid var(--stroke); padding:6px 10px; border-radius:999px;
+      background: rgba(255,255,255,.02); font-size:12px; color:var(--muted)
+    }
+    .badge svg{opacity:.9}
+
+    /* Claim */
+    .claim{
+      margin-top:28px;
+      display:grid; gap:10px;
+      background: linear-gradient(180deg, rgba(16,185,129,.08), rgba(6,182,212,.06));
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      padding: clamp(18px,3vw,24px);
+      box-shadow: var(--shadow);
+    }
+    .claim h2{
+      font-size: clamp(22px, 3.2vw, 28px);
+      font-weight:700;
+    }
+    .claim p{color:var(--muted);max-width:66ch}
+
+    /* Actions */
+    .actions{
+      margin-top:18px;
+      display:flex;flex-wrap:wrap;gap:12px
+    }
+    .btn{
+      appearance:none; border:1px solid var(--stroke);
+      padding:12px 16px; border-radius:12px;
+      background:#0e1729; color:var(--ink);
+      display:inline-flex; align-items:center; gap:10px;
+      cursor:pointer; text-decoration:none; font-weight:600;
+      transition:.2s transform ease, .2s box-shadow ease, .2s background ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+    }
+    .btn:hover{ transform: translateY(-1px) }
+    .btn--brand{ background: linear-gradient(135deg, var(--brand), var(--brand-2)); border-color:transparent }
+    .btn svg{ width:18px;height:18px }
+    .btn--ghost{ background:transparent }
+
+    /* Sections */
+    .pill{
+      margin-top:34px; color:var(--muted); font-size:12px; letter-spacing:.12em; text-transform:uppercase
     }
 
-    p {
-      font-size: 1rem;
-      color: #b0c4de;
-      margin-bottom: 0.5rem;
+    .grid{
+      margin-top:12px;
+      display:grid; gap:14px;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media (max-width:880px){ .grid{ grid-template-columns: 1fr 1fr } }
+    @media (max-width:560px){ .hero{ grid-template-columns: 72px 1fr } .grid{ grid-template-columns: 1fr } }
+
+    .card{
+      border:1px solid var(--stroke); border-radius:16px; padding:16px;
+      background:rgba(14,23,41,.6); box-shadow: var(--shadow); height:100%
+    }
+    .card h3{ margin:2px 0 6px; font-size:18px }
+    .card p{ color:var(--muted); font-size:14px }
+
+    /* Foot */
+    footer{
+      margin:34px auto 8px;
+      color:var(--muted); font-size:13px; text-align:center;
     }
 
-    .loader {
-      margin-top: 2rem;
-      width: 60px;
-      height: 3px;
-      background: rgba(255,255,255,0.1);
-      overflow: hidden;
-      position: relative;
-      border-radius: 2px;
+    /* Micro loader (opcional) */
+    .loader{
+      margin-left:6px; width:54px; height:3px; border-radius:2px; overflow:hidden; background:rgba(255,255,255,.08); display:inline-block; vertical-align:middle
     }
+    .loader::before{
+      content:""; display:block; height:100%; width:32%;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      animation: move 1.6s infinite linear
+    }
+    @keyframes move{ 0%{transform: translateX(-100%)} 50%{transform: translateX(220%)} 100%{transform: translateX(-100%)} }
 
-    .loader::before {
-      content: "";
-      position: absolute;
-      width: 30%;
-      height: 100%;
-      background: #00bcd4;
-      animation: loading 1.5s infinite linear;
-    }
-
-    @keyframes loading {
-      0% { left: -30%; }
-      50% { left: 100%; }
-      100% { left: -30%; }
-    }
-
-    .donate {
-      margin-top: 2.5rem;
-      font-size: 0.9rem;
-      color: #9fbad0;
-      opacity: 0.9;
-    }
-
-    .donate a {
-      display: inline-block;
-      margin-top: 0.8rem;
-      padding: 0.6rem 1.5rem;
-      background: #00bcd4;
-      color: #fff;
-      border-radius: 30px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px rgba(0,188,212,0.3);
-    }
-
-    .donate a:hover {
-      background: #00a6bd;
-      box-shadow: 0 0 15px rgba(0,188,212,0.5);
-      transform: translateY(-2px);
-    }
-
-    footer {
-      position: absolute;
-      bottom: 20px;
-      font-size: 0.8rem;
-      color: #708090;
-      opacity: 0.7;
-    }
+    a.inline{ color:var(--ink); text-underline-offset:3px }
+    .muted{ color:var(--muted) }
   </style>
 </head>
+
 <body>
-  <img src="/image2vector.svg" alt="MindCar logo" />
-  <h1>MindCar — En construcción</h1>
-  <p>Estamos desarrollando la nueva plataforma de gestión inteligente para vehículos.</p>
-  <p>Pronto estará disponible en su versión pública.</p>
+  <main class="wrap">
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="brand">
+      <div class="hero__logo" aria-hidden="true">
+        <img src="/image2vector.svg" alt="">
+      </div>
+      <div>
+        <h1 id="brand" class="hero__title">MindCar</h1>
+        <div class="hero__location">
+          <span class="badge" title="Verificado">
+            <!-- shield check -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-3Z" stroke="currentColor" stroke-width="1.4"/><path d="m9 12 2.2 2.2L15.5 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Verificado
+          </span>
+          <span>Palencia, Castilla y León, España</span>
+        </div>
+      </div>
+    </section>
 
-  <div class="loader"></div>
+    <!-- Claim principal -->
+    <section class="claim" aria-labelledby="claim">
+      <h2 id="claim">Porque los coches no son “de segunda mano”, <span style="color:var(--brand)">son tu primera historia</span>.</h2>
+      <p>Conectamos a la gente que entiende lo que hay bajo el capó: apasionados, mecánicos, propietarios con mimo y compradores que valoran el historial, no solo el precio.</p>
+      <div class="actions">
+        <button class="btn btn--brand" id="shareBtn">
+          <!-- share -->
+          <svg viewBox="0 0 24 24" fill="none"><path d="M16 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" transform="translate(-4 4)" stroke="currentColor" stroke-width="1.6"/><path d="M8 13.5 16 9m-8 5 8 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          Compartir
+        </button>
 
-  <div class="donate">
-    <p>Si deseas apoyar el desarrollo de MindCar, puedes hacerlo aquí:</p>
-    <a href="https://paypal.me/MindCar" target="_blank" rel="noopener">
-      Contribuir vía PayPal
-    </a>
-  </div>
+        <a class="btn" href="mailto:hola@mindcar.app" aria-label="Contactar por email">
+          <!-- mail -->
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6"/><path d="m3 7 9 6 9-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Contacto
+        </a>
 
-  <footer>© 2025 MindCar · Todos los derechos reservados</footer>
+        <a class="btn btn--ghost" href="https://paypal.me/MindCar" target="_blank" rel="noopener">
+          <!-- heart -->
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.35-9-8.5C1.4 9.1 3.2 6 6.5 6A5 5 0 0 1 12 9a5 5 0 0 1 5.5-3c3.3 0 5.1 3.1 3.5 6.5-2 4.15-9 8.5-9 8.5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Apoyar el proyecto
+        </a>
+      </div>
+    </section>
+
+    <!-- Qué es MindCar -->
+    <p class="pill">Qué es</p>
+    <section class="grid" aria-label="Qué es MindCar">
+      <article class="card">
+        <h3>Por y para entusiastas</h3>
+        <p>La comunidad prioriza el cuidado, el mantenimiento y la transparencia. Aquí pesa más un buen historial que un pulido rápido.</p>
+      </article>
+      <article class="card">
+        <h3>Confianza técnica</h3>
+        <p>Ficha viva del vehículo: mantenimiento, piezas, mejoras y métricas reales. Habla el coche, no el eslogan.</p>
+      </article>
+      <article class="card">
+        <h3>Conexiones reales</h3>
+        <p>Ponemos en contacto a quienes saben lo que buscan con quienes han cuidado su máquina como debe ser.</p>
+      </article>
+    </section>
+
+    <!-- Estado del proyecto -->
+    <p class="pill">Estado</p>
+    <section class="card">
+      <p><strong>Estamos afinando el motor.</strong> Beta cerrada en curso<span class="loader" aria-hidden="true"></span></p>
+      <p class="muted" style="margin-top:8px">¿Quieres entrar en boxes? Escríbenos a <a class="inline" href="mailto:hola@mindcar.app">hola@mindcar.app</a> con el asunto <em>“Quiero la beta”</em>.</p>
+    </section>
+
+    <footer>
+      © <span id="y"></span> MindCar · Hecho con cariño y gasolina sintética
+    </footer>
+  </main>
+
+  <script>
+    // Año dinámico
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Compartir (móvil/desktop)
+    const shareBtn = document.getElementById('shareBtn');
+    shareBtn?.addEventListener('click', async () => {
+      const data = {
+        title: 'MindCar — Tu primera historia',
+        text: 'La app creada por y para los amantes del motor.',
+        url: location.href
+      };
+      if (navigator.share) {
+        try { await navigator.share(data); }
+        catch (e) { console.warn('Share cancelado'); }
+      } else {
+        // Fallback: copiar enlace
+        try {
+          await navigator.clipboard.writeText(location.href);
+          shareBtn.innerHTML = 'Enlace copiado';
+          setTimeout(() => shareBtn.innerHTML =
+            `<svg viewBox="0 0 24 24" fill="none"><path d="M16 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" transform="translate(-4 4)" stroke="currentColor" stroke-width="1.6"/><path d="M8 13.5 16 9m-8 5 8 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg> Compartir`;
+        }, 1600);
+        } catch { alert('Copia este enlace: ' + location.href); }
+      }
+    });
+  </script>
 </body>
 </html>
