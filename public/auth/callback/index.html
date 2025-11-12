@@ -3,37 +3,126 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cuenta activada - MindCar</title>
+  <title>Cuenta activada — MindCar</title>
+  <meta name="theme-color" content="#0b1220">
+  <link rel="icon" href="/logo-full.png">
+  <style>
+    :root{
+      --bg:#0b1220; --ink:#e8f1ff; --muted:#a6b9d4;
+      --brand:#10b981; --brand-2:#06b6d4;
+      --card:#102332; --stroke:#0f2a3a;
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--ink);
+      background: linear-gradient(180deg,#0a1622 0%,#0c1826 40%,#0b1220 100%);
+      font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+      line-height:1.5; text-align:center; padding:clamp(12px,2.5vw,20px);
+    }
+    .wrap{max-width:960px;margin-inline:auto}
+    .logo{width:min(320px,75%);margin:16px auto 8px;filter:drop-shadow(0 0 10px rgba(0,0,0,.35))}
+    .card{
+      background:var(--card); border:1px solid var(--stroke); border-radius:var(--radius);
+      padding:clamp(18px,2.8vw,26px); max-width:700px; margin:8px auto 0; text-align:left;
+    }
+    .badge-ok{
+      display:inline-flex; align-items:center; gap:8px;
+      color:var(--brand); font-weight:700; margin:0 0 8px;
+      background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.25);
+      border-radius:999px; padding:6px 10px;
+    }
+    .title{font-size:clamp(22px,3.2vw,34px); font-weight:800; margin:0 0 12px}
+    .lead{color:var(--muted); margin:0 0 14px}
+    .actions{margin-top:12px}
+    .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
+    .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2)); width:100%; text-align:center; display:block}
+    footer{
+      max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px;
+      display:flex; justify-content:flex-end; align-items:flex-start; padding:0 8px
+    }
+    .f-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px;}
+    .web-link{
+      color:var(--brand); text-decoration:none;
+      display:inline-flex; align-items:center; gap:6px;
+    }
+    .bottom-row{
+      display:flex; align-items:center; gap:14px;
+    }
+    .bottom-row a{
+      color:var(--brand); text-decoration:none;
+      display:inline-flex; align-items:center; gap:6px;
+    }
+    @media (max-width:420px){
+      footer{justify-content:center; text-align:center}
+      .f-right{align-items:center}
+      .bottom-row{justify-content:center; flex-wrap:wrap}
+    }
+  </style>
 </head>
-<body style="font-family: Arial, sans-serif; background-color: #f7f9fa; margin:0; padding:0;">
-  <table align="center" width="100%" cellpadding="0" cellspacing="0"
-         style="max-width:600px;margin:40px auto;background:#ffffff;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-    <tr>
-      <td style="background:#03BCBF;padding:20px;text-align:center;border-radius:8px 8px 0 0;">
-        <h1 style="color:#fff;margin:0;font-size:24px;">MindCar</h1>
-      </td>
-    </tr>
-    <tr>
-      <td style="padding:30px;color:#333;text-align:center;">
-        <h2 style="color:#03BCBF;">Cuenta activada</h2>
-        <p style="font-size:15px;line-height:1.5;">
-          Tu cuenta ha sido activada correctamente. 🎉<br><br>
-          Puedes volver a la aplicación <strong>MindCar</strong> e iniciar sesión.
-        </p>
-      </td>
-    </tr>
-    <tr>
-      <td style="background:#f0f0f0;padding:15px;text-align:center;border-radius:0 0 8px 8px;color:#777;font-size:12px;">
-        © 2025 MindCar — Todos los derechos reservados.<br />
-        <a href="https://mindcar.es" style="color:#03BCBF;text-decoration:none;">mindcar.es</a>
-      </td>
-    </tr>
-  </table>
+<body>
+  <main class="wrap" role="main">
+    <img src="/logo-full-app.svg" alt="MindCar" class="logo" />
+
+    <section class="card" aria-labelledby="title">
+      <!-- Badge verde arriba del título -->
+      <p class="badge-ok" aria-live="polite">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3l6 2.6V10c0 4.4-2.9 8.5-6 10-3.1-1.5-6-5.6-6-10V5.6L12 3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+          <path d="M8.7 12.6l2 2 4-4.6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Cuenta activada
+      </p>
+
+      <h1 id="title" class="title">Tu cuenta ya está activa</h1>
+      <p class="lead">Ya puedes volver a la aplicación e iniciar sesión. 🎉</p>
+
+      <div class="actions">
+        <!-- Botón ancho completo como en reset -->
+        <a id="open-app" class="btn btn-primary" href="#">Abrir la app</a>
+      </div>
+    </section>
+
+    <footer>
+      <div class="f-right">
+        <!-- Enlace web arriba -->
+        <a href="https://mindcar.es" target="_self" rel="noopener" class="web-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
+            <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+          mindcar.es
+        </a>
+        <!-- Debajo: © 2025 MindCar y correo en la misma línea -->
+        <div class="bottom-row">
+          <span>© <span id="year"></span> MindCar</span>
+          <a href="mailto:mindcar@mindcar.es">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+              <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+              <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            mindcar@mindcar.es
+          </a>
+        </div>
+      </div>
+    </footer>
+  </main>
 
   <script>
+    // Año dinámico
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Preserva la query (?...) al abrir la app y en el fallback de redirección
     const qs = location.search || '';
-    // Fallback por si (en escritorio) no hay App Link
-    location.href = 'mindcar://auth/callback' + qs;
+    const appUrl = 'mindcar://auth/callback' + qs;
+
+    // Botón "Abrir la app"
+    const openBtn = document.getElementById('open-app');
+    openBtn.setAttribute('href', appUrl);
+
+    // Redirección automática (fallback de escritorio)
+    location.href = appUrl;
   </script>
 </body>
 </html>
