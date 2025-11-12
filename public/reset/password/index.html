@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MindCar — Restablecer contraseña</title>
+  <title>Restablecer contraseña — MindCar</title>
   <meta name="description" content="Restablece tu contraseña de MindCar de forma segura.">
   <meta name="theme-color" content="#0b1220">
   <link rel="icon" href="/logo-full.png">
@@ -20,29 +20,35 @@
       margin:0; color:var(--ink);
       background: linear-gradient(180deg,#0a1622 0%,#0c1826 40%,#0b1220 100%);
       font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
-      line-height:1.5; text-align:center; padding:clamp(16px,3vw,24px);
+      line-height:1.5; text-align:center; padding:clamp(12px,2.5vw,20px);
     }
     .wrap{max-width:960px;margin-inline:auto}
-    .logo{width:min(320px,75%);margin:40px auto 20px;filter:drop-shadow(0 0 10px rgba(0,0,0,.35))}
+    /* ↓ menos separación arriba/abajo del logo */
+    .logo{width:min(320px,75%);margin:16px auto 8px;filter:drop-shadow(0 0 10px rgba(0,0,0,.35))}
     .card{
       background:var(--card); border:1px solid var(--stroke); border-radius:var(--radius);
-      padding:clamp(20px,3vw,28px); max-width:700px; margin:10px auto 0; text-align:left;
+      padding:clamp(18px,2.8vw,26px); max-width:700px; margin:8px auto 0; text-align:left;
     }
-    .title{font-size:clamp(22px,3.2vw,34px); font-weight:800; margin:0 0 6px}
-    .lead{color:var(--muted); margin:0 0 16px}
+    .title{font-size:clamp(22px,3.2vw,34px); font-weight:800; margin:0 0 12px}
+    .lead{color:var(--muted); margin:0 0 14px}
+    .status-ok{
+      display:flex; align-items:center; gap:10px;
+      color:var(--brand); font-weight:700; margin:0 0 10px;
+    }
+    .status-ok svg{flex:0 0 auto}
     .err{color:#ff6b6b; font-weight:700}
     .ok{color:#19d18f; font-weight:700}
     .hidden{display:none}
-    .form-grid{display:grid; gap:12px; margin-top:10px}
+    .form-grid{display:grid; gap:12px; margin-top:12px}
     label{font-weight:700}
     .field{display:flex; align-items:center; gap:8px; background:#0b1c29; border:1px solid #163346; border-radius:14px; padding:8px 12px}
     .field input{flex:1; background:transparent; border:0; outline:none; color:var(--ink); font-size:16px; padding:6px 6px}
     .field button{background:transparent; border:0; color:var(--muted); cursor:pointer; padding:6px; border-radius:8px}
-    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px}
+    .actions{margin-top:8px}
     .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
-    .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2))}
-    .btn-ghost{color:var(--ink); background:transparent; border:1px solid var(--stroke)}
-    footer{max-width:700px; margin:28px auto 8px; color:var(--muted); font-size:13px; display:flex; justify-content:space-between; align-items:center; padding:0 8px}
+    /* ↓ botón verde a ancho completo y texto centrado */
+    .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2)); width:100%; text-align:center; display:block}
+    footer{max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px; display:flex; justify-content:space-between; align-items:center; padding:0 8px}
     footer a{color:var(--brand); text-decoration:none}
     @media (prefers-reduced-motion: reduce){.btn{transition:none}}
   </style>
@@ -51,8 +57,19 @@
   <main class="wrap" role="main">
     <img src="/logo-full-app.svg" alt="MindCar" class="logo" />
     <section class="card" aria-labelledby="reset-title">
-      <h1 id="reset-title" class="title">Restablecer contraseña <span style="color:var(--brand)">MindCar</span></h1>
-      <p id="status" class="lead" aria-live="polite">Validando enlace…</p>
+      <!-- ↓ Título sin “MindCar” verde -->
+      <h1 id="reset-title" class="title">Restablecer contraseña</h1>
+
+      <!-- ↓ Estado verde, alineado a la izquierda, con escudo -->
+      <p id="status" class="status-ok hidden" aria-live="polite">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 2l7 3v6c0 5-3.5 9.5-7 11-3.5-1.5-7-6-7-11V5l7-3z" stroke="currentColor" stroke-width="1.8" fill="none"/>
+          <path d="M8.5 12.5l2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Enlace verificado. Elige tu nueva contraseña.
+      </p>
+
+      <p id="hint" class="lead">Validando enlace…</p>
       <p id="error" class="err hidden" aria-live="assertive"></p>
       <p id="done" class="ok hidden" aria-live="polite">Contraseña actualizada. Redirigiendo…</p>
 
@@ -60,7 +77,7 @@
         <div>
           <label for="pass1">Nueva contraseña</label>
           <div class="field">
-            <input id="pass1" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••••">
+            <input id="pass1" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••">
             <button type="button" data-toggle="pass1" aria-label="Mostrar u ocultar contraseña">👁️</button>
           </div>
         </div>
@@ -68,16 +85,16 @@
         <div>
           <label for="pass2">Repite la contraseña</label>
           <div class="field">
-            <input id="pass2" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••••">
+            <input id="pass2" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••">
             <button type="button" data-toggle="pass2" aria-label="Mostrar u ocultar contraseña">👁️</button>
           </div>
         </div>
 
         <div class="actions">
+          <!-- ↓ único botón, ancho completo -->
           <button class="btn btn-primary" type="submit">Guardar contraseña</button>
-          <a class="btn btn-ghost" href="https://mindcar.es">Volver a MindCar</a>
         </div>
-        <p class="lead" style="margin:8px 0 0;">Mínimo 8 caracteres. No compartas este enlace.</p>
+        <p class="lead" style="margin:8px 0 0;">Mínimo 6 caracteres. No compartas este enlace.</p>
       </form>
     </section>
 
@@ -87,70 +104,58 @@
     </footer>
   </main>
 
-  <!-- JS: versión simple y a prueba de bombas -->
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-    // 🔧 Config
     const SUPABASE_URL = 'https://ltbnqaqammaxtksprptt.supabase.co'
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M'
     const REDIRECT_AFTER_OK = 'https://mindcar.es'
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { flowType: 'implicit' } // reset cross-device
-    })
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { flowType: 'implicit' } })
 
     const $ = (id) => document.getElementById(id)
-    const $status = $('status'), $form = $('form'), $done = $('done'), $err = $('error')
+    const $status = $('status'), $hint = $('hint'), $form = $('form'), $done = $('done'), $err = $('error')
     $('year').textContent = new Date().getFullYear()
 
-    // Toggle 👁️
     document.querySelectorAll('[data-toggle]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id = btn.getAttribute('data-toggle')
-        const input = document.getElementById(id)
+        const input = document.getElementById(btn.getAttribute('data-toggle'))
         input.type = input.type === 'password' ? 'text' : 'password'
       })
     })
 
-    // 1) Intenta sesión por hash (Implicit). Si no, intenta intercambio por ?code (PKCE).
     ;(async () => {
       try {
-        // Si el proveedor devolvió error explícito en la URL, muestralo
         const url = new URL(window.location.href)
         const errCode = url.searchParams.get('error_code') || new URLSearchParams(url.hash.slice(1)).get('error_code')
         const errDesc = url.searchParams.get('error_description') || new URLSearchParams(url.hash.slice(1)).get('error_description')
         if (errCode || errDesc) throw new Error(`${errCode || 'error'}: ${errDesc || ''}`.trim())
 
         let { data: { session } } = await supabase.auth.getSession()
-
         if (!session) {
-          // Soporte PKCE por si alguien llega con ?code=...
           const { error } = await supabase.auth.exchangeCodeForSession(window.location.href)
           if (error) throw error
           ;({ data: { session } } = await supabase.auth.getSession())
         }
-
         if (!session) throw new Error('Enlace de recuperación no válido o caducado.')
 
-        $status.textContent = 'Enlace verificado. Elige tu nueva contraseña.'
+        $hint.classList.add('hidden')
+        $status.classList.remove('hidden')
         $form.classList.remove('hidden')
       } catch (e) {
-        $status.classList.add('hidden')
+        $hint.classList.add('hidden')
         $err.textContent = e.message || 'No se pudo validar el enlace.'
         $err.classList.remove('hidden')
       }
     })()
 
-    // 2) Cambiar contraseña
     $form.addEventListener('submit', async (ev) => {
       ev.preventDefault()
       $err.classList.add('hidden')
-
       const p1 = $('pass1').value.trim()
       const p2 = $('pass2').value.trim()
       if (p1 !== p2) return showError('Las contraseñas no coinciden.')
-      if (p1.length < 8) return showError('Mínimo 8 caracteres.')
+      if (p1.length < 6) return showError('Mínimo 6 caracteres.')
 
       try {
         const { error } = await supabase.auth.updateUser({ password: p1 })
