@@ -28,7 +28,6 @@
       background:var(--card); border:1px solid var(--stroke); border-radius:var(--radius);
       padding:clamp(18px,2.8vw,26px); max-width:700px; margin:8px auto 0; text-align:left;
     }
-    /* Pill de estado arriba del título */
     .badge-ok{
       display:inline-flex; align-items:center; gap:8px;
       color:var(--brand); font-weight:700; margin:0 0 8px;
@@ -42,15 +41,29 @@
     .hidden{display:none}
     .form-grid{display:grid; gap:12px; margin-top:12px}
     label{font-weight:700}
-    .field{display:flex; align-items:center; gap:8px; background:#0b1c29; border:1px solid #163346; border-radius:14px; padding:8px 12px}
-    .field input{flex:1; background:transparent; border:0; outline:none; color:var(--ink); font-size:16px; padding:6px 6px}
+    .field{
+      display:flex; align-items:center; gap:8px;
+      background:#0b1c29; border:1px solid #163346; border-radius:14px; padding:8px 12px
+    }
+    .field input{
+      flex:1; background:transparent; border:0; outline:none; color:var(--ink);
+      font-size:16px; padding:6px 6px;
+    }
+    .field input::placeholder{ color:rgba(166,185,212,.45) }
     .toggle-eye{background:transparent; border:0; cursor:pointer; padding:4px; border-radius:8px; color:var(--muted)}
     .hint{color:var(--muted); font-size:13px; margin:6px 2px 0}
     .actions{margin-top:8px}
     .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
     .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2)); width:100%; text-align:center; display:block}
-    footer{max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px; display:flex; justify-content:space-between; align-items:center; padding:0 8px}
-    footer a{color:var(--brand); text-decoration:none; display:inline-flex; align-items:center; gap:6px}
+    footer{
+      max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px;
+      display:flex; justify-content:space-between; align-items:flex-start; padding:0 8px
+    }
+    .f-left{opacity:.9}
+    .f-right{display:flex; flex-direction:column; gap:6px; align-items:flex-end}
+    .f-right a{
+      color:var(--brand); text-decoration:none; display:inline-flex; align-items:center; gap:6px
+    }
     @media (prefers-reduced-motion: reduce){.btn{transition:none}}
   </style>
 </head>
@@ -58,10 +71,7 @@
   <main class="wrap" role="main">
     <img src="/logo-full-app.svg" alt="MindCar" class="logo" />
     <section class="card" aria-labelledby="reset-title">
-
-      <!-- Estado verde arriba del título -->
       <p id="badge" class="badge-ok hidden" aria-live="polite">
-        <!-- escudo fino -->
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M12 3l6 2.6V10c0 4.4-2.9 8.5-6 10-3.1-1.5-6-5.6-6-10V5.6L12 3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
           <path d="M8.7 12.6l2 2 4-4.6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -80,15 +90,8 @@
           <label for="pass1">Nueva contraseña</label>
           <div class="field">
             <input id="pass1" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••">
-            <!-- ojo fino profesional -->
-            <button type="button" class="toggle-eye" data-toggle="pass1" aria-label="Mostrar u ocultar contraseña">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6" />
-                <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
-              </svg>
-            </button>
+            <button type="button" class="toggle-eye" data-toggle="pass1" aria-label="Mostrar contraseña"></button>
           </div>
-          <!-- hint justo bajo el primer campo -->
           <p class="hint">Mínimo 6 caracteres.</p>
         </div>
 
@@ -96,12 +99,7 @@
           <label for="pass2">Repite la contraseña</label>
           <div class="field">
             <input id="pass2" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••">
-            <button type="button" class="toggle-eye" data-toggle="pass2" aria-label="Mostrar u ocultar contraseña">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6" />
-                <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
-              </svg>
-            </button>
+            <button type="button" class="toggle-eye" data-toggle="pass2" aria-label="Mostrar contraseña"></button>
           </div>
         </div>
 
@@ -112,10 +110,16 @@
     </section>
 
     <footer>
-      <div>© <span id="year"></span> MindCar</div>
-      <div>
-        <a href="mailto:mindcar@mindcar.es" aria-label="Enviar correo a MindCar">
-          <!-- icono de correo sutil en verde -->
+      <div class="f-left">© <span id="year"></span> MindCar</div>
+      <div class="f-right">
+        <a href="https://mindcar.es" target="_self" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
+            <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+          mindcar.es
+        </a>
+        <a href="mailto:mindcar@mindcar.es">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
             <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
             <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -139,15 +143,36 @@
     const $badge = $('badge'), $hint = $('hint'), $form = $('form'), $done = $('done'), $err = $('error')
     $('year').textContent = new Date().getFullYear()
 
-    // toggles de ojo
-    document.querySelectorAll('[data-toggle]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const input = document.getElementById(btn.getAttribute('data-toggle'))
-        input.type = (input.type === 'password') ? 'text' : 'password'
-      })
-    })
+    // --- SVGs para el icono del ojo
+    const eyeOpenSvg = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+      </svg>`;
+    const eyeOffSvg = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
+        <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+        <path d="M4 20L20 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>`;
 
-    ;(async () => {
+    // --- Toggle del ojo con cambio de icono dinámico
+    document.querySelectorAll('[data-toggle]').forEach(btn => {
+      const input = document.getElementById(btn.getAttribute('data-toggle'));
+      const updateIcon = () => {
+        const visible = input.type === 'text';
+        btn.innerHTML = visible ? eyeOffSvg : eyeOpenSvg;
+        btn.setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña');
+      };
+      updateIcon();
+      btn.addEventListener('click', () => {
+        input.type = input.type === 'password' ? 'text' : 'password';
+        updateIcon();
+      });
+    });
+
+    // --- Verificación de enlace Supabase
+    (async () => {
       try {
         const url = new URL(window.location.href)
         const errCode = url.searchParams.get('error_code') || new URLSearchParams(url.hash.slice(1)).get('error_code')
@@ -170,8 +195,9 @@
         $err.textContent = e.message || 'No se pudo validar el enlace.'
         $err.classList.remove('hidden')
       }
-    })()
+    })();
 
+    // --- Envío del formulario
     $form.addEventListener('submit', async (ev) => {
       ev.preventDefault()
       $err.classList.add('hidden')
