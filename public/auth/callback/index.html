@@ -34,18 +34,21 @@
     }
     .title{font-size:clamp(22px,3.2vw,34px); font-weight:800; margin:0 0 12px}
     .lead{color:var(--muted); margin:0 0 6px}
+
+    /* === footer: © a la izquierda, web arriba + mail abajo a la derecha === */
     footer{
       max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px;
-      display:flex; justify-content:space-between; align-items:flex-start; padding:0 8px
+      display:flex; justify-content:space-between; align-items:flex-start; padding:0 8px;
     }
-    .f-left{align-self:flex-end} /* © a la izquierda */
-    .f-right{display:flex; flex-direction:column; gap:6px; align-items:flex-end}
+    .f-left{align-self:flex-end; text-align:left}
+    .f-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px}
     .web-link,.mail-link{
       color:var(--brand); text-decoration:none; display:inline-flex; align-items:center; gap:6px
     }
+
     @media (max-width:520px){
-      footer{flex-direction:column; gap:8px; align-items:center}
-      .f-left,.f-right{align-items:center; text-align:center}
+      footer{flex-direction:column; gap:8px; align-items:stretch}
+      .f-right{align-items:flex-start}
     }
   </style>
 </head>
@@ -68,9 +71,10 @@
     </section>
 
     <footer>
-      <!-- izquierda: © -->
+      <!-- IZQUIERDA: © (alineado con el card) -->
       <div class="f-left">© <span id="year"></span> MindCar</div>
-      <!-- derecha: web arriba, correo abajo -->
+
+      <!-- DERECHA: web arriba, correo abajo -->
       <div class="f-right">
         <a href="https://mindcar.es" target="_self" rel="noopener" class="web-link">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
@@ -91,11 +95,7 @@
   </main>
 
   <script>
-    // año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
-    // si en el futuro vuelves a habilitar deep links, aquí podrías reactivar el esquema:
-    // const qs = location.search || '';
-    // location.href = 'mindcar://auth/callback' + qs;
   </script>
 </body>
 </html>
