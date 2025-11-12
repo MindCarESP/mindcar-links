@@ -145,87 +145,111 @@
     </footer>
   </main>
 
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  // ==== Tus credenciales públicas ====
+  const SUPABASE_URL = 'https://ltbnqaqammaxtksprptt.supabase.co';
+  const SUPABASE_ANON_KEY = 'TU_ANON_KEY_AQUI';
+  const REDIRECT_AFTER_OK = 'https://mindcar.es';
 
-    // === Configura tus credenciales públicas ===
-    const SUPABASE_URL = 'https://ltbnqaqammaxtksprptt.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M';
-    const REDIRECT_AFTER_OK = 'https://mindcar.es';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const $status = document.getElementById('status');
+  const $form   = document.getElementById('form');
+  const $done   = document.getElementById('done');
+  const $err    = document.getElementById('error');
 
-    // helpers query/hash
-    const qs = new URLSearchParams(window.location.search);
-    const getQuery = (k)=> qs.get(k);
-    const getHash = (k)=>{
-      const h = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : window.location.hash;
-      return new URLSearchParams(h).get(k);
-    };
+  const qs = new URLSearchParams(window.location.search);
+  const hash = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : window.location.hash;
+  const hs = new URLSearchParams(hash);
 
-    const $status = document.getElementById('status');
-    const $form   = document.getElementById('form');
-    const $done   = document.getElementById('done');
-    const $err    = document.getElementById('error');
+  // Extra: algunos templates meten "confirmation_url" en la query
+  function extractFromConfirmationUrl() {
+    const inner = qs.get('confirmation_url');
+    if (!inner) return { kind: 'none' };
+    try {
+      const u = new URL(inner);
+      const q2 = u.searchParams;
+      const h2 = new URLSearchParams(u.hash.startsWith('#') ? u.hash.slice(1) : u.hash);
+      const code = q2.get('code');
+      const at   = h2.get('access_token');
+      const rt   = h2.get('refresh_token');
+      const type = q2.get('type') || h2.get('type');
+      return { kind: 'inner', code, at, rt, type };
+    } catch { return { kind: 'bad' }; }
+  }
 
-    // show/hide password toggles
-    const toggleVis = (input, btn)=>{
-      btn.addEventListener('click', ()=>{
-        input.type = input.type === 'password' ? 'text' : 'password';
-      });
-    };
-    toggleVis(document.getElementById('pass1'), document.getElementById('t1'));
-    toggleVis(document.getElementById('pass2'), document.getElementById('t2'));
+  (async function init() {
+    try {
+      // 1) Si viene error explícito desde Supabase, muéstralo claro
+      const errCode = qs.get('error_code') || hs.get('error_code') || qs.get('error');
+      const errDesc = qs.get('error_description') || hs.get('error_description');
+      if (errCode || errDesc) {
+        throw new Error((errCode || 'error') + (errDesc ? (': ' + errDesc) : ''));
+      }
 
-    (async function init(){
-      try{
-        // Soporta link con ?code=... (PKCE) y/o #access_token / refresh_token (legacy)
-        const code = getQuery('code');
-        const access_token = getHash('access_token');
-        const refresh_token = getHash('refresh_token');
-        const type = getQuery('type') || getHash('type');
+      // 2) Soporta los tres formatos:
+      //    a) ?code=... (PKCE moderno)
+      //    b) #access_token / #refresh_token (legacy)
+      //    c) ?confirmation_url=<url con a) o b)
+      const directCode = qs.get('code');
+      const at = hs.get('access_token');
+      const rt = hs.get('refresh_token');
+      const type = qs.get('type') || hs.get('type');
 
-        if (code){
-          const { error } = await supabase.auth.exchangeCodeForSession(code);
+      const inner = extractFromConfirmationUrl();
+
+      if (directCode) {
+        const { error } = await supabase.auth.exchangeCodeForSession(directCode);
+        if (error) throw error;
+      } else if (at && rt && (type === 'recovery' || !type)) {
+        const { error } = await supabase.auth.setSession({ access_token: at, refresh_token: rt });
+        if (error) throw error;
+      } else if (inner.kind === 'inner') {
+        if (inner.code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(inner.code);
           if (error) throw error;
-        } else if (access_token && refresh_token && (type === 'recovery' || !type)){
-          const { error } = await supabase.auth.setSession({ access_token, refresh_token });
+        } else if (inner.at && inner.rt && (inner.type === 'recovery' || !inner.type)) {
+          const { error } = await supabase.auth.setSession({ access_token: inner.at, refresh_token: inner.rt });
           if (error) throw error;
         } else {
-          throw new Error('Enlace de recuperación no válido o caducado.');
+          throw new Error('confirmation_url recibido pero no contiene credenciales.');
         }
-
-        $status.textContent = 'Enlace verificado. Elige tu nueva contraseña.';
-        $form.classList.remove('hidden');
-      } catch (e){
-        $status.classList.add('hidden');
-        $err.textContent = e.message || 'No se pudo validar el enlace.';
-        $err.classList.remove('hidden');
+      } else {
+        throw new Error('Enlace de recuperación no válido o caducado.');
       }
-    })();
 
-    document.getElementById('form').addEventListener('submit', async (ev)=>{
-      ev.preventDefault();
-      $err.classList.add('hidden');
+      $status.textContent = 'Enlace verificado. Elige tu nueva contraseña.';
+      $form.classList.remove('hidden');
+    } catch (e) {
+      $status.classList.add('hidden');
+      $err.textContent = e.message || 'No se pudo validar el enlace.';
+      $err.classList.remove('hidden');
+    }
+  })();
 
-      const p1 = document.getElementById('pass1').value.trim();
-      const p2 = document.getElementById('pass2').value.trim();
+  document.getElementById('form').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    $err.classList.add('hidden');
 
-      if (p1 !== p2){ $err.textContent = 'Las contraseñas no coinciden.'; $err.classList.remove('hidden'); return; }
-      if (p1.length < 8){ $err.textContent = 'Mínimo 8 caracteres.'; $err.classList.remove('hidden'); return; }
+    const p1 = document.getElementById('pass1').value.trim();
+    const p2 = document.getElementById('pass2').value.trim();
 
-      try{
-        const { error } = await supabase.auth.updateUser({ password: p1 });
-        if (error) throw error;
+    if (p1 !== p2) { $err.textContent = 'Las contraseñas no coinciden.'; $err.classList.remove('hidden'); return; }
+    if (p1.length < 8) { $err.textContent = 'Mínimo 8 caracteres.'; $err.classList.remove('hidden'); return; }
 
-        $form.classList.add('hidden');
-        $done.classList.remove('hidden');
-        setTimeout(()=>window.location.assign(REDIRECT_AFTER_OK), 1200);
-      } catch(e){
-        $err.textContent = e.message || 'No se pudo actualizar la contraseña.';
-        $err.classList.remove('hidden');
-      }
-    });
-  </script>
+    try {
+      const { error } = await supabase.auth.updateUser({ password: p1 });
+      if (error) throw error;
+      document.getElementById('form').classList.add('hidden');
+      document.getElementById('done').classList.remove('hidden');
+      setTimeout(()=>window.location.assign(REDIRECT_AFTER_OK), 1200);
+    } catch (e) {
+      $err.textContent = e.message || 'No se pudo actualizar la contraseña.';
+      $err.classList.remove('hidden');
+    }
+  });
+</script>
+
 </body>
 </html>
