@@ -55,26 +55,21 @@
     .actions{margin-top:8px}
     .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
     .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2)); width:100%; text-align:center; display:block}
+
+    /* === footer actualizado: © a la izquierda, web arriba + mail abajo a la derecha === */
     footer{
       max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px;
-      display:flex; justify-content:flex-end; align-items:flex-start; padding:0 8px
+      display:flex; justify-content:space-between; align-items:flex-start; padding:0 8px;
     }
+    .f-left{align-self:flex-end; text-align:left}
     .f-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px;}
-    .web-link{
+    .web-link,.mail-link{
       color:var(--brand); text-decoration:none;
       display:inline-flex; align-items:center; gap:6px;
     }
-    .bottom-row{
-      display:flex; align-items:center; gap:14px;
-    }
-    .bottom-row a{
-      color:var(--brand); text-decoration:none;
-      display:inline-flex; align-items:center; gap:6px;
-    }
-    @media (max-width:420px){
-      footer{justify-content:center; text-align:center}
-      .f-right{align-items:center}
-      .bottom-row{justify-content:center; flex-wrap:wrap}
+    @media (max-width:520px){
+      footer{flex-direction:column; gap:8px; align-items:stretch}
+      .f-right{align-items:flex-start}
     }
   </style>
 </head>
@@ -121,6 +116,10 @@
     </section>
 
     <footer>
+      <!-- IZQUIERDA: © (alineado con el card) -->
+      <div class="f-left">© <span id="year"></span> MindCar</div>
+
+      <!-- DERECHA: web arriba, correo abajo -->
       <div class="f-right">
         <a href="https://mindcar.es" target="_self" rel="noopener" class="web-link">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
@@ -129,17 +128,13 @@
           </svg>
           mindcar.es
         </a>
-
-        <div class="bottom-row">
-          <span>© <span id="year"></span> MindCar</span>
-          <a href="mailto:mindcar@mindcar.es">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
-              <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
-              <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            mindcar@mindcar.es
-          </a>
-        </div>
+        <a href="mailto:mindcar@mindcar.es" class="mail-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+            <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+            <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          mindcar@mindcar.es
+        </a>
       </div>
     </footer>
   </main>
