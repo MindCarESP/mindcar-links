@@ -4,109 +4,55 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MindCar — Restablecer contraseña</title>
-
   <meta name="description" content="Restablece tu contraseña de MindCar de forma segura.">
   <meta name="theme-color" content="#0b1220">
-  <meta property="og:title" content="MindCar — Restablecer contraseña">
-  <meta property="og:description" content="Página segura para recuperar el acceso a tu cuenta.">
-  <meta property="og:image" content="/logo-full.png">
-  <meta property="og:type" content="website">
   <link rel="icon" href="/logo-full.png">
-
   <style>
-    /* === mismos tokens de color/estilo que tu landing === */
     :root{
       --bg:#0b1220; --ink:#e8f1ff; --muted:#a6b9d4;
       --brand:#10b981; --brand-2:#06b6d4;
       --card:#102332; --stroke:#0f2a3a;
-      --shadow: 0 10px 30px rgba(0,0,0,.25);
-      --radius: 18px;
+      --radius:18px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0; color:var(--ink);
-      background: linear-gradient(180deg, #0a1622 0%, #0c1826 40%, #0b1220 100%);
+      background: linear-gradient(180deg,#0a1622 0%,#0c1826 40%,#0b1220 100%);
       font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial;
-      line-height:1.5; text-align:center;
-      padding: clamp(16px, 3vw, 24px);
+      line-height:1.5; text-align:center; padding:clamp(16px,3vw,24px);
     }
-    .wrap{max-width:960px; margin-inline:auto}
-    .logo-full{
-      width:min(340px, 75%); margin:40px auto 20px;
-      filter: drop-shadow(0 0 10px rgba(0,0,0,.35));
-      transition: transform .25s ease;
-    }
-    .logo-full:hover{ transform: scale(1.02) }
+    .wrap{max-width:960px;margin-inline:auto}
+    .logo{width:min(320px,75%);margin:40px auto 20px;filter:drop-shadow(0 0 10px rgba(0,0,0,.35))}
     .card{
-      background: var(--card); border:1px solid var(--stroke);
-      border-radius: var(--radius); box-shadow: var(--shadow);
-      padding: clamp(20px,3vw,28px); max-width:700px; margin:10px auto 0;
-      text-align:left;
+      background:var(--card); border:1px solid var(--stroke); border-radius:var(--radius);
+      padding:clamp(20px,3vw,28px); max-width:700px; margin:10px auto 0; text-align:left;
     }
-    .title{
-      font-size: clamp(22px, 3.2vw, 34px); font-weight:800; margin:0 0 6px;
-    }
-    .lead{ color:var(--muted); margin:0 0 16px }
-    .form-grid{ display:grid; gap:12px; margin-top:10px }
-    label{ font-weight:700 }
-    .field{
-      position:relative; display:flex; align-items:center;
-      background:#0b1c29; border:1px solid #163346; border-radius:14px;
-      padding: 8px 12px;
-    }
-    .field input{
-      flex:1; background:transparent; border:0; outline:none; color:var(--ink);
-      font-size:16px; padding:6px 6px;
-    }
-    .field button{
-      background:transparent; border:0; color:var(--muted); cursor:pointer;
-      padding:6px; border-radius:8px;
-    }
-    .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px }
-    .btn{
-      appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0;
-      font-weight:900; font-size:16px; text-decoration:none; display:inline-flex; align-items:center; justify-content:center;
-      transition: transform .12s ease, filter .12s ease;
-    }
-    .btn:hover{ transform: translateY(-2px) }
-    .btn:active{ transform: translateY(0) scale(.99) }
-    .btn-primary{
-      color:#06141a; background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      box-shadow: 0 6px 16px rgba(0,0,0,.35);
-      border:3px solid #0b3a35;
-    }
-    .btn-ghost{
-      color:var(--ink); background:transparent; border:1px solid var(--stroke);
-    }
-    .muted{ color:var(--muted) }
-    .ok{ color:#19d18f; font-weight:700 }
-    .err{ color:#ff6b6b; font-weight:700 }
-    .hidden{ display:none }
-
-    footer{
-      max-width:700px; margin:28px auto 8px; color:var(--muted); font-size:13px;
-      display:flex; justify-content:space-between; align-items:center; padding:0 8px;
-    }
-    footer a{ color:var(--brand); text-decoration:none; font-weight:500; display:inline-flex; gap:6px }
-    footer a:hover{ color:var(--brand-2) }
-    @media (prefers-reduced-motion: reduce){
-      .logo-full{ transition:none }
-      .btn{ transition:none }
-    }
+    .title{font-size:clamp(22px,3.2vw,34px); font-weight:800; margin:0 0 6px}
+    .lead{color:var(--muted); margin:0 0 16px}
+    .err{color:#ff6b6b; font-weight:700}
+    .ok{color:#19d18f; font-weight:700}
+    .hidden{display:none}
+    .form-grid{display:grid; gap:12px; margin-top:10px}
+    label{font-weight:700}
+    .field{display:flex; align-items:center; gap:8px; background:#0b1c29; border:1px solid #163346; border-radius:14px; padding:8px 12px}
+    .field input{flex:1; background:transparent; border:0; outline:none; color:var(--ink); font-size:16px; padding:6px 6px}
+    .field button{background:transparent; border:0; color:var(--muted); cursor:pointer; padding:6px; border-radius:8px}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px}
+    .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
+    .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2))}
+    .btn-ghost{color:var(--ink); background:transparent; border:1px solid var(--stroke)}
+    footer{max-width:700px; margin:28px auto 8px; color:var(--muted); font-size:13px; display:flex; justify-content:space-between; align-items:center; padding:0 8px}
+    footer a{color:var(--brand); text-decoration:none}
+    @media (prefers-reduced-motion: reduce){.btn{transition:none}}
   </style>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
   <main class="wrap" role="main">
-    <img src="/logo-full-app.svg" alt="MindCar" class="logo-full" />
-
+    <img src="/logo-full-app.svg" alt="MindCar" class="logo" />
     <section class="card" aria-labelledby="reset-title">
-      <h1 id="reset-title" class="title">
-        Restablecer contraseña <span style="color:var(--brand)">MindCar</span>
-      </h1>
-      <p id="status" class="lead" aria-live="polite">Comprobando enlace de recuperación…</p>
+      <h1 id="reset-title" class="title">Restablecer contraseña <span style="color:var(--brand)">MindCar</span></h1>
+      <p id="status" class="lead" aria-live="polite">Validando enlace…</p>
       <p id="error" class="err hidden" aria-live="assertive"></p>
       <p id="done" class="ok hidden" aria-live="polite">Contraseña actualizada. Redirigiendo…</p>
 
@@ -115,7 +61,7 @@
           <label for="pass1">Nueva contraseña</label>
           <div class="field">
             <input id="pass1" type="password" required minlength="8" autocomplete="new-password" placeholder="••••••••">
-            <button type="button" id="t1" aria-label="Mostrar u ocultar contraseña">👁️</button>
+            <button type="button" data-toggle="pass1" aria-label="Mostrar u ocultar contraseña">👁️</button>
           </div>
         </div>
 
@@ -123,7 +69,7 @@
           <label for="pass2">Repite la contraseña</label>
           <div class="field">
             <input id="pass2" type="password" required minlength="8" autocomplete="new-password" placeholder="••••••••">
-            <button type="button" id="t2" aria-label="Mostrar u ocultar contraseña">👁️</button>
+            <button type="button" data-toggle="pass2" aria-label="Mostrar u ocultar contraseña">👁️</button>
           </div>
         </div>
 
@@ -131,125 +77,93 @@
           <button class="btn btn-primary" type="submit">Guardar contraseña</button>
           <a class="btn btn-ghost" href="https://mindcar.es">Volver a MindCar</a>
         </div>
-        <p class="muted">Mínimo 8 caracteres. No compartas este enlace.</p>
+        <p class="lead" style="margin:8px 0 0;">Mínimo 8 caracteres. No compartas este enlace.</p>
       </form>
     </section>
 
     <footer>
-      <div>© <span id="y"></span> MindCar · La app creada por y para los amantes del motor</div>
-      <div>
-        <a href="mailto:mindcar@mindcar.es" aria-label="Enviar correo a MindCar">
-          ✉️ mindcar@mindcar.es
-        </a>
-      </div>
+      <div>© <span id="year"></span> MindCar</div>
+      <div><a href="mailto:mindcar@mindcar.es">✉️ mindcar@mindcar.es</a></div>
     </footer>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script>
-  // ==== Tus credenciales públicas ====
-  const SUPABASE_URL = 'https://ltbnqaqammaxtksprptt.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M';
-  const REDIRECT_AFTER_OK = 'https://mindcar.es';
+  <!-- JS: versión simple y a prueba de bombas -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // 🔧 Config
+    const SUPABASE_URL = 'https://ltbnqaqammaxtksprptt.supabase.co'
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M'
+    const REDIRECT_AFTER_OK = 'https://mindcar.es'
 
-  const $status = document.getElementById('status');
-  const $form   = document.getElementById('form');
-  const $done   = document.getElementById('done');
-  const $err    = document.getElementById('error');
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { flowType: 'implicit' } // reset cross-device
+    })
 
-  const qs = new URLSearchParams(window.location.search);
-  const hash = window.location.hash.startsWith('#') ? window.location.hash.slice(1) : window.location.hash;
-  const hs = new URLSearchParams(hash);
+    const $ = (id) => document.getElementById(id)
+    const $status = $('status'), $form = $('form'), $done = $('done'), $err = $('error')
+    $('year').textContent = new Date().getFullYear()
 
-  // Extra: algunos templates meten "confirmation_url" en la query
-  function extractFromConfirmationUrl() {
-    const inner = qs.get('confirmation_url');
-    if (!inner) return { kind: 'none' };
-    try {
-      const u = new URL(inner);
-      const q2 = u.searchParams;
-      const h2 = new URLSearchParams(u.hash.startsWith('#') ? u.hash.slice(1) : u.hash);
-      const code = q2.get('code');
-      const at   = h2.get('access_token');
-      const rt   = h2.get('refresh_token');
-      const type = q2.get('type') || h2.get('type');
-      return { kind: 'inner', code, at, rt, type };
-    } catch { return { kind: 'bad' }; }
-  }
+    // Toggle 👁️
+    document.querySelectorAll('[data-toggle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-toggle')
+        const input = document.getElementById(id)
+        input.type = input.type === 'password' ? 'text' : 'password'
+      })
+    })
 
-  (async function init() {
-    try {
-      // 1) Si viene error explícito desde Supabase, muéstralo claro
-      const errCode = qs.get('error_code') || hs.get('error_code') || qs.get('error');
-      const errDesc = qs.get('error_description') || hs.get('error_description');
-      if (errCode || errDesc) {
-        throw new Error((errCode || 'error') + (errDesc ? (': ' + errDesc) : ''));
-      }
+    // 1) Intenta sesión por hash (Implicit). Si no, intenta intercambio por ?code (PKCE).
+    ;(async () => {
+      try {
+        // Si el proveedor devolvió error explícito en la URL, muestralo
+        const url = new URL(window.location.href)
+        const errCode = url.searchParams.get('error_code') || new URLSearchParams(url.hash.slice(1)).get('error_code')
+        const errDesc = url.searchParams.get('error_description') || new URLSearchParams(url.hash.slice(1)).get('error_description')
+        if (errCode || errDesc) throw new Error(`${errCode || 'error'}: ${errDesc || ''}`.trim())
 
-      // 2) Soporta los tres formatos:
-      //    a) ?code=... (PKCE moderno)
-      //    b) #access_token / #refresh_token (legacy)
-      //    c) ?confirmation_url=<url con a) o b)
-      const directCode = qs.get('code');
-      const at = hs.get('access_token');
-      const rt = hs.get('refresh_token');
-      const type = qs.get('type') || hs.get('type');
+        let { data: { session } } = await supabase.auth.getSession()
 
-      const inner = extractFromConfirmationUrl();
-
-      if (directCode) {
-        const { error } = await supabase.auth.exchangeCodeForSession(directCode);
-        if (error) throw error;
-      } else if (at && rt && (type === 'recovery' || !type)) {
-        const { error } = await supabase.auth.setSession({ access_token: at, refresh_token: rt });
-        if (error) throw error;
-      } else if (inner.kind === 'inner') {
-        if (inner.code) {
-          const { error } = await supabase.auth.exchangeCodeForSession(inner.code);
-          if (error) throw error;
-        } else if (inner.at && inner.rt && (inner.type === 'recovery' || !inner.type)) {
-          const { error } = await supabase.auth.setSession({ access_token: inner.at, refresh_token: inner.rt });
-          if (error) throw error;
-        } else {
-          throw new Error('confirmation_url recibido pero no contiene credenciales.');
+        if (!session) {
+          // Soporte PKCE por si alguien llega con ?code=...
+          const { error } = await supabase.auth.exchangeCodeForSession(window.location.href)
+          if (error) throw error
+          ;({ data: { session } } = await supabase.auth.getSession())
         }
-      } else {
-        throw new Error('Enlace de recuperación no válido o caducado.');
+
+        if (!session) throw new Error('Enlace de recuperación no válido o caducado.')
+
+        $status.textContent = 'Enlace verificado. Elige tu nueva contraseña.'
+        $form.classList.remove('hidden')
+      } catch (e) {
+        $status.classList.add('hidden')
+        $err.textContent = e.message || 'No se pudo validar el enlace.'
+        $err.classList.remove('hidden')
       }
+    })()
 
-      $status.textContent = 'Enlace verificado. Elige tu nueva contraseña.';
-      $form.classList.remove('hidden');
-    } catch (e) {
-      $status.classList.add('hidden');
-      $err.textContent = e.message || 'No se pudo validar el enlace.';
-      $err.classList.remove('hidden');
-    }
-  })();
+    // 2) Cambiar contraseña
+    $form.addEventListener('submit', async (ev) => {
+      ev.preventDefault()
+      $err.classList.add('hidden')
 
-  document.getElementById('form').addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-    $err.classList.add('hidden');
+      const p1 = $('pass1').value.trim()
+      const p2 = $('pass2').value.trim()
+      if (p1 !== p2) return showError('Las contraseñas no coinciden.')
+      if (p1.length < 8) return showError('Mínimo 8 caracteres.')
 
-    const p1 = document.getElementById('pass1').value.trim();
-    const p2 = document.getElementById('pass2').value.trim();
+      try {
+        const { error } = await supabase.auth.updateUser({ password: p1 })
+        if (error) throw error
+        $form.classList.add('hidden')
+        $done.classList.remove('hidden')
+        setTimeout(() => window.location.assign(REDIRECT_AFTER_OK), 1200)
+      } catch (e) {
+        showError(e.message || 'No se pudo actualizar la contraseña.')
+      }
+    })
 
-    if (p1 !== p2) { $err.textContent = 'Las contraseñas no coinciden.'; $err.classList.remove('hidden'); return; }
-    if (p1.length < 8) { $err.textContent = 'Mínimo 8 caracteres.'; $err.classList.remove('hidden'); return; }
-
-    try {
-      const { error } = await supabase.auth.updateUser({ password: p1 });
-      if (error) throw error;
-      document.getElementById('form').classList.add('hidden');
-      document.getElementById('done').classList.remove('hidden');
-      setTimeout(()=>window.location.assign(REDIRECT_AFTER_OK), 1200);
-    } catch (e) {
-      $err.textContent = e.message || 'No se pudo actualizar la contraseña.';
-      $err.classList.remove('hidden');
-    }
-  });
-</script>
-
+    function showError(msg){ $err.textContent = msg; $err.classList.remove('hidden') }
+  </script>
 </body>
 </html>
