@@ -10,14 +10,13 @@
     :root{
       --bg:#0b1220; --ink:#e8f1ff; --muted:#a6b9d4;
       --brand:#10b981; --brand-2:#06b6d4;
-      --card:#102332; --stroke:#0f2a3a;
-      --radius:18px;
+      --card:#102332; --stroke:#0f2a3a; --radius:18px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0; color:var(--ink);
-      background: linear-gradient(180deg,#0a1622 0%,#0c1826 40%,#0b1220 100%);
+      background:linear-gradient(180deg,#0a1622 0%,#0c1826 40%,#0b1220 100%);
       font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
       line-height:1.5; text-align:center; padding:clamp(12px,2.5vw,20px);
     }
@@ -34,30 +33,19 @@
       border-radius:999px; padding:6px 10px;
     }
     .title{font-size:clamp(22px,3.2vw,34px); font-weight:800; margin:0 0 12px}
-    .lead{color:var(--muted); margin:0 0 14px}
-    .actions{margin-top:12px}
-    .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
-    .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2)); width:100%; text-align:center; display:block}
+    .lead{color:var(--muted); margin:0 0 6px}
     footer{
       max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px;
-      display:flex; justify-content:flex-end; align-items:flex-start; padding:0 8px
+      display:flex; justify-content:space-between; align-items:flex-start; padding:0 8px
     }
-    .f-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px;}
-    .web-link{
-      color:var(--brand); text-decoration:none;
-      display:inline-flex; align-items:center; gap:6px;
+    .f-left{align-self:flex-end} /* © a la izquierda */
+    .f-right{display:flex; flex-direction:column; gap:6px; align-items:flex-end}
+    .web-link,.mail-link{
+      color:var(--brand); text-decoration:none; display:inline-flex; align-items:center; gap:6px
     }
-    .bottom-row{
-      display:flex; align-items:center; gap:14px;
-    }
-    .bottom-row a{
-      color:var(--brand); text-decoration:none;
-      display:inline-flex; align-items:center; gap:6px;
-    }
-    @media (max-width:420px){
-      footer{justify-content:center; text-align:center}
-      .f-right{align-items:center}
-      .bottom-row{justify-content:center; flex-wrap:wrap}
+    @media (max-width:520px){
+      footer{flex-direction:column; gap:8px; align-items:center}
+      .f-left,.f-right{align-items:center; text-align:center}
     }
   </style>
 </head>
@@ -66,7 +54,6 @@
     <img src="/logo-full-app.svg" alt="MindCar" class="logo" />
 
     <section class="card" aria-labelledby="title">
-      <!-- Badge verde arriba del título -->
       <p class="badge-ok" aria-live="polite">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M12 3l6 2.6V10c0 4.4-2.9 8.5-6 10-3.1-1.5-6-5.6-6-10V5.6L12 3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
@@ -76,17 +63,15 @@
       </p>
 
       <h1 id="title" class="title">Tu cuenta ya está activa</h1>
-      <p class="lead">Ya puedes volver a la aplicación e iniciar sesión. 🎉</p>
-
-      <div class="actions">
-        <!-- Botón ancho completo como en reset -->
-        <a id="open-app" class="btn btn-primary" href="#">Abrir la app</a>
-      </div>
+      <p class="lead">Ya puedes volver a la aplicación e iniciar sesión.</p>
+      <p class="lead">Si tenías la app abierta, reiníciala para refrescar el estado.</p>
     </section>
 
     <footer>
+      <!-- izquierda: © -->
+      <div class="f-left">© <span id="year"></span> MindCar</div>
+      <!-- derecha: web arriba, correo abajo -->
       <div class="f-right">
-        <!-- Enlace web arriba -->
         <a href="https://mindcar.es" target="_self" rel="noopener" class="web-link">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
             <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
@@ -94,35 +79,23 @@
           </svg>
           mindcar.es
         </a>
-        <!-- Debajo: © 2025 MindCar y correo en la misma línea -->
-        <div class="bottom-row">
-          <span>© <span id="year"></span> MindCar</span>
-          <a href="mailto:mindcar@mindcar.es">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
-              <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
-              <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            mindcar@mindcar.es
-          </a>
-        </div>
+        <a href="mailto:mindcar@mindcar.es" class="mail-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+            <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+            <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          mindcar@mindcar.es
+        </a>
       </div>
     </footer>
   </main>
 
   <script>
-    // Año dinámico
+    // año dinámico
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Preserva la query (?...) al abrir la app y en el fallback de redirección
-    const qs = location.search || '';
-    const appUrl = 'mindcar://auth/callback' + qs;
-
-    // Botón "Abrir la app"
-    const openBtn = document.getElementById('open-app');
-    openBtn.setAttribute('href', appUrl);
-
-    // Redirección automática (fallback de escritorio)
-    location.href = appUrl;
+    // si en el futuro vuelves a habilitar deep links, aquí podrías reactivar el esquema:
+    // const qs = location.search || '';
+    // location.href = 'mindcar://auth/callback' + qs;
   </script>
 </body>
 </html>
