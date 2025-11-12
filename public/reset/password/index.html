@@ -23,19 +23,20 @@
       line-height:1.5; text-align:center; padding:clamp(12px,2.5vw,20px);
     }
     .wrap{max-width:960px;margin-inline:auto}
-    /* ↓ menos separación arriba/abajo del logo */
     .logo{width:min(320px,75%);margin:16px auto 8px;filter:drop-shadow(0 0 10px rgba(0,0,0,.35))}
     .card{
       background:var(--card); border:1px solid var(--stroke); border-radius:var(--radius);
       padding:clamp(18px,2.8vw,26px); max-width:700px; margin:8px auto 0; text-align:left;
     }
+    /* Pill de estado arriba del título */
+    .badge-ok{
+      display:inline-flex; align-items:center; gap:8px;
+      color:var(--brand); font-weight:700; margin:0 0 8px;
+      background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.25);
+      border-radius:999px; padding:6px 10px;
+    }
     .title{font-size:clamp(22px,3.2vw,34px); font-weight:800; margin:0 0 12px}
     .lead{color:var(--muted); margin:0 0 14px}
-    .status-ok{
-      display:flex; align-items:center; gap:10px;
-      color:var(--brand); font-weight:700; margin:0 0 10px;
-    }
-    .status-ok svg{flex:0 0 auto}
     .err{color:#ff6b6b; font-weight:700}
     .ok{color:#19d18f; font-weight:700}
     .hidden{display:none}
@@ -43,13 +44,13 @@
     label{font-weight:700}
     .field{display:flex; align-items:center; gap:8px; background:#0b1c29; border:1px solid #163346; border-radius:14px; padding:8px 12px}
     .field input{flex:1; background:transparent; border:0; outline:none; color:var(--ink); font-size:16px; padding:6px 6px}
-    .field button{background:transparent; border:0; color:var(--muted); cursor:pointer; padding:6px; border-radius:8px}
+    .toggle-eye{background:transparent; border:0; cursor:pointer; padding:4px; border-radius:8px; color:var(--muted)}
+    .hint{color:var(--muted); font-size:13px; margin:6px 2px 0}
     .actions{margin-top:8px}
     .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
-    /* ↓ botón verde a ancho completo y texto centrado */
     .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2)); width:100%; text-align:center; display:block}
     footer{max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px; display:flex; justify-content:space-between; align-items:center; padding:0 8px}
-    footer a{color:var(--brand); text-decoration:none}
+    footer a{color:var(--brand); text-decoration:none; display:inline-flex; align-items:center; gap:6px}
     @media (prefers-reduced-motion: reduce){.btn{transition:none}}
   </style>
 </head>
@@ -57,17 +58,18 @@
   <main class="wrap" role="main">
     <img src="/logo-full-app.svg" alt="MindCar" class="logo" />
     <section class="card" aria-labelledby="reset-title">
-      <!-- ↓ Título sin “MindCar” verde -->
-      <h1 id="reset-title" class="title">Restablecer contraseña</h1>
 
-      <!-- ↓ Estado verde, alineado a la izquierda, con escudo -->
-      <p id="status" class="status-ok hidden" aria-live="polite">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 2l7 3v6c0 5-3.5 9.5-7 11-3.5-1.5-7-6-7-11V5l7-3z" stroke="currentColor" stroke-width="1.8" fill="none"/>
-          <path d="M8.5 12.5l2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Estado verde arriba del título -->
+      <p id="badge" class="badge-ok hidden" aria-live="polite">
+        <!-- escudo fino -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3l6 2.6V10c0 4.4-2.9 8.5-6 10-3.1-1.5-6-5.6-6-10V5.6L12 3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+          <path d="M8.7 12.6l2 2 4-4.6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Enlace verificado. Elige tu nueva contraseña.
+        Enlace verificado
       </p>
+
+      <h1 id="reset-title" class="title">Restablecer contraseña</h1>
 
       <p id="hint" class="lead">Validando enlace…</p>
       <p id="error" class="err hidden" aria-live="assertive"></p>
@@ -78,29 +80,49 @@
           <label for="pass1">Nueva contraseña</label>
           <div class="field">
             <input id="pass1" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••">
-            <button type="button" data-toggle="pass1" aria-label="Mostrar u ocultar contraseña">👁️</button>
+            <!-- ojo fino profesional -->
+            <button type="button" class="toggle-eye" data-toggle="pass1" aria-label="Mostrar u ocultar contraseña">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6" />
+                <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+              </svg>
+            </button>
           </div>
+          <!-- hint justo bajo el primer campo -->
+          <p class="hint">Mínimo 6 caracteres.</p>
         </div>
 
         <div>
           <label for="pass2">Repite la contraseña</label>
           <div class="field">
             <input id="pass2" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••">
-            <button type="button" data-toggle="pass2" aria-label="Mostrar u ocultar contraseña">👁️</button>
+            <button type="button" class="toggle-eye" data-toggle="pass2" aria-label="Mostrar u ocultar contraseña">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6" />
+                <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+              </svg>
+            </button>
           </div>
         </div>
 
         <div class="actions">
-          <!-- ↓ único botón, ancho completo -->
           <button class="btn btn-primary" type="submit">Guardar contraseña</button>
         </div>
-        <p class="lead" style="margin:8px 0 0;">Mínimo 6 caracteres. No compartas este enlace.</p>
       </form>
     </section>
 
     <footer>
       <div>© <span id="year"></span> MindCar</div>
-      <div><a href="mailto:mindcar@mindcar.es">✉️ mindcar@mindcar.es</a></div>
+      <div>
+        <a href="mailto:mindcar@mindcar.es" aria-label="Enviar correo a MindCar">
+          <!-- icono de correo sutil en verde -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+            <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+            <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          mindcar@mindcar.es
+        </a>
+      </div>
     </footer>
   </main>
 
@@ -114,13 +136,14 @@
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { flowType: 'implicit' } })
 
     const $ = (id) => document.getElementById(id)
-    const $status = $('status'), $hint = $('hint'), $form = $('form'), $done = $('done'), $err = $('error')
+    const $badge = $('badge'), $hint = $('hint'), $form = $('form'), $done = $('done'), $err = $('error')
     $('year').textContent = new Date().getFullYear()
 
+    // toggles de ojo
     document.querySelectorAll('[data-toggle]').forEach(btn => {
       btn.addEventListener('click', () => {
         const input = document.getElementById(btn.getAttribute('data-toggle'))
-        input.type = input.type === 'password' ? 'text' : 'password'
+        input.type = (input.type === 'password') ? 'text' : 'password'
       })
     })
 
@@ -140,7 +163,7 @@
         if (!session) throw new Error('Enlace de recuperación no válido o caducado.')
 
         $hint.classList.add('hidden')
-        $status.classList.remove('hidden')
+        $badge.classList.remove('hidden')
         $form.classList.remove('hidden')
       } catch (e) {
         $hint.classList.add('hidden')
@@ -152,8 +175,8 @@
     $form.addEventListener('submit', async (ev) => {
       ev.preventDefault()
       $err.classList.add('hidden')
-      const p1 = $('pass1').value.trim()
-      const p2 = $('pass2').value.trim()
+      const p1 = document.getElementById('pass1').value.trim()
+      const p2 = document.getElementById('pass2').value.trim()
       if (p1 !== p2) return showError('Las contraseñas no coinciden.')
       if (p1.length < 6) return showError('Mínimo 6 caracteres.')
 
