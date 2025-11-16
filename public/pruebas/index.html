@@ -43,6 +43,19 @@
         },
       };
     </script>
+
+    <script>
+      const btn = document.getElementById("mobileMenuBtn");
+      const menu = document.getElementById("mobileMenu");
+      let open = false;
+    
+      btn.addEventListener("click", () => {
+        open = !open;
+        menu.style.transform = open ? "translateX(0)" : "translateX(100%)";
+      });
+    </script>
+
+    
     <style>
       body {
         min-height: max(884px, 100dvh);
