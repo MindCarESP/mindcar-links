@@ -114,13 +114,24 @@
               </button>
 
               <!-- Menú móvil (hamburger) -->
-              <button class="text-gray-900 dark:text-white md:hidden">
+              <button id="mobileMenuBtn" class="text-gray-900 dark:text-white md:hidden">
                 <span class="material-symbols-outlined">menu</span>
               </button>
             </div>
           </div>
         </div>
       </header>
+
+      <!-- Mobile Menu -->
+      <div id="mobileMenu" class="md:hidden fixed top-16 right-0 z-40 w-64 h-[calc(100vh-4rem)] bg-background-light dark:bg-background-dark border-l border-gray-300 dark:border-gray-700 translate-x-full transition-transform duration-300">
+        <nav class="flex flex-col p-6 gap-6 text-base font-medium">
+          <a href="#" class="hover:text-primary">Servicios</a>
+          <a href="#" class="hover:text-primary">Sobre Nosotros</a>
+          <a href="#" class="hover:text-primary">Aviso Legal</a>
+          <a href="#" class="hover:text-primary">FAQ</a>
+          <a href="#" class="hover:text-primary">Contacto</a>
+        </nav>
+      </div>
 
       <main class="container mx-auto px-4 py-8 @container">
         <!-- Hero Section -->
