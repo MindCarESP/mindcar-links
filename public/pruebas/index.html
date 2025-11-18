@@ -30,9 +30,12 @@
         theme: {
           extend: {
             colors: {
-              primary: "#13ec13",
-              "background-light": "#f6f8f6",
-              "background-dark": "#102210",
+              // PALETA ACTUALIZADA para un look más orgánico y terroso
+              primary: "#6B8E23", // Verde Oliva: Natural, estable, representa la agricultura.
+              'primary-dark': '#8FB34C', // Un tono ligeramente más claro para el modo oscuro
+              "background-light": "#FFFAF0", // Color Crema/Blanco Hueso: Suave, cálido, no tan duro como el blanco puro.
+              "background-dark": "#1C2A1C", // Verde muy oscuro/Casi negro: Fondo profundo para el modo oscuro, remite a la tierra.
+              "card-dark": "#2B3C2B", // Un tono más claro que el fondo oscuro para las tarjetas.
             },
             fontFamily: {
               display: ["Space Grotesk", "sans-serif"],
@@ -54,7 +57,6 @@
     <div
       class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden"
     >
-      <!-- Header -->
       <header
         class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm"
       >
@@ -69,50 +71,46 @@
               >
             </div>
 
-            <!-- NAV + IDIOMA + HAMBURGER -->
             <div class="flex items-center gap-4">
-              <!-- Menú escritorio -->
               <nav
                 class="hidden md:flex items-center gap-6 text-sm font-medium"
               >
                 <a
                   href="#"
-                  class="text-gray-700 dark:text-gray-300 hover:text-primary"
+                  class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-dark"
                 >
                   Servicios
                 </a>
                 <a
                   href="#"
-                  class="text-gray-700 dark:text-gray-300 hover:text-primary"
+                  class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-dark"
                 >
                   Sobre Nosotros
                 </a>
                 <a
                   href="#"
-                  class="text-gray-700 dark:text-gray-300 hover:text-primary"
+                  class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-dark"
                 >
                   Aviso Legal
                 </a>
                 <a
                   href="#"
-                  class="text-gray-700 dark:text-gray-300 hover:text-primary"
+                  class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-dark"
                 >
                   FAQ
                 </a>
                 <a
                   href="#"
-                  class="text-gray-700 dark:text-gray-300 hover:text-primary"
+                  class="text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-dark"
                 >
                   Contacto
                 </a>
               </nav>
 
-              <!-- Botón idioma (visible en móvil y escritorio) -->
               <button class="text-gray-900 dark:text-white">
                 <span class="material-symbols-outlined">language</span>
               </button>
 
-              <!-- Menú móvil (hamburger) -->
               <button
                 id="mobileMenuBtn"
                 class="text-gray-900 dark:text-white md:hidden"
@@ -124,30 +122,27 @@
         </div>
       </header>
 
-      <!-- Mobile Menu -->
       <div
         id="mobileMenu"
         class="md:hidden fixed top-16 right-0 z-40 w-64 h-[calc(100vh-4rem)] bg-background-light dark:bg-background-dark border-l border-gray-300 dark:border-gray-700 translate-x-full transition-transform duration-300"
       >
         <nav class="flex flex-col p-6 gap-6 text-base font-medium">
-          <a href="#" class="hover:text-primary">Servicios</a>
-          <a href="#" class="hover:text-primary">Sobre Nosotros</a>
-          <a href="#" class="hover:text-primary">Aviso Legal</a>
-          <a href="#" class="hover:text-primary">FAQ</a>
-          <a href="#" class="hover:text-primary">Contacto</a>
+          <a href="#" class="hover:text-primary dark:hover:text-primary-dark">Servicios</a>
+          <a href="#" class="hover:text-primary dark:hover:text-primary-dark">Sobre Nosotros</a>
+          <a href="#" class="hover:text-primary dark:hover:text-primary-dark">Aviso Legal</a>
+          <a href="#" class="hover:text-primary dark:hover:text-primary-dark">FAQ</a>
+          <a href="#" class="hover:text-primary dark:hover:text-primary-dark">Contacto</a>
         </nav>
       </div>
 
       <main class="container mx-auto px-4 py-8 @container">
-        <!-- Hero Section -->
         <section class="grid grid-cols-1 gap-12 @[864px]:grid-cols-2">
-          <!-- Left Column: Authentication -->
           <div class="flex flex-col">
             <div
               class="flex w-full border-b border-gray-200 dark:border-gray-700"
             >
               <button
-                class="flex-1 py-3 text-center font-semibold border-b-2 border-primary text-primary"
+                class="flex-1 py-3 text-center font-semibold border-b-2 border-primary text-primary dark:border-primary-dark dark:text-primary-dark"
               >
                 Iniciar Sesión
               </button>
@@ -164,7 +159,7 @@
                   >Correo Electrónico</span
                 >
                 <input
-                  class="form-input rounded-lg border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white focus:border-primary focus:ring-primary/50"
+                  class="form-input rounded-lg border-gray-300 bg-white dark:bg-card-dark dark:border-gray-600 dark:text-white focus:border-primary dark:focus:border-primary-dark focus:ring-primary/50"
                   placeholder="tu@email.com"
                   type="email"
                 />
@@ -175,27 +170,26 @@
                   >Contraseña</span
                 >
                 <input
-                  class="form-input rounded-lg border-gray-300 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white focus:border-primary focus:ring-primary/50"
+                  class="form-input rounded-lg border-gray-300 bg-white dark:bg-card-dark dark:border-gray-600 dark:text-white focus:border-primary dark:focus:border-primary-dark focus:ring-primary/50"
                   placeholder="••••••••"
                   type="password"
                 />
               </label>
               <button
-                class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-background-dark text-base font-bold leading-normal tracking-[0.015em]"
+                class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary dark:bg-primary-dark text-background-dark dark:text-background-dark text-base font-bold leading-normal tracking-[0.015em]"
               >
                 <span class="truncate">Entrar</span>
               </button>
               <a
-                class="text-center text-sm text-primary/80 hover:text-primary"
+                class="text-center text-sm text-primary/80 hover:text-primary dark:text-primary-dark/80 dark:hover:text-primary-dark"
                 href="#"
                 >¿Olvidaste tu contraseña?</a
               >
             </div>
           </div>
 
-          <!-- Right Column: Value Proposition -->
           <div
-            class="flex flex-col gap-6 rounded-xl bg-green-900/20 dark:bg-green-500/10 p-6 @[864px]:p-8"
+            class="flex flex-col gap-6 rounded-xl bg-primary/20 dark:bg-primary-dark/10 p-6 @[864px]:p-8"
           >
             <div class="flex flex-col gap-2">
               <h1
@@ -214,7 +208,7 @@
             <div class="flex flex-col gap-4 mt-4">
               <div class="flex items-start gap-4">
                 <div
-                  class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary"
+                  class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary dark:text-primary-dark"
                 >
                   <span class="material-symbols-outlined">storefront</span>
                 </div>
@@ -230,7 +224,7 @@
               </div>
               <div class="flex items-start gap-4">
                 <div
-                  class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary"
+                  class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary dark:text-primary-dark"
                 >
                   <span class="material-symbols-outlined">verified_user</span>
                 </div>
@@ -246,7 +240,7 @@
               </div>
               <div class="flex items-start gap-4">
                 <div
-                  class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary"
+                  class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary dark:text-primary-dark"
                 >
                   <span class="material-symbols-outlined">monitoring</span>
                 </div>
@@ -264,7 +258,6 @@
           </div>
         </section>
 
-        <!-- Transactions Section -->
         <section class="mt-16 py-10 @[480px]:mt-24">
           <div class="flex flex-col gap-4 text-center">
             <h2
@@ -281,7 +274,7 @@
             class="mt-10 overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700"
           >
             <table class="w-full min-w-[640px] text-left text-sm">
-              <thead class="bg-gray-50 dark:bg-gray-800/50">
+              <thead class="bg-gray-50 dark:bg-card-dark">
                 <tr>
                   <th class="p-4 font-semibold">Producto</th>
                   <th class="p-4 font-semibold">Cantidad</th>
@@ -297,7 +290,7 @@
                   </td>
                   <td class="p-4">15 Toneladas</td>
                   <td
-                    class="p-4 font-mono text-primary/90 dark:text-primary"
+                    class="p-4 font-mono text-primary/90 dark:text-primary-dark"
                   >
                     €450.00 / Ton
                   </td>
@@ -312,7 +305,7 @@
                   </td>
                   <td class="p-4">500 Litros</td>
                   <td
-                    class="p-4 font-mono text-primary/90 dark:text-primary"
+                    class="p-4 font-mono text-primary/90 dark:text-primary-dark"
                   >
                     €8.50 / L
                   </td>
@@ -327,7 +320,7 @@
                   </td>
                   <td class="p-4">2 Toneladas</td>
                   <td
-                    class="p-4 font-mono text-primary/90 dark:text-primary"
+                    class="p-4 font-mono text-primary/90 dark:text-primary-dark"
                   >
                     €1.20 / Kg
                   </td>
@@ -340,7 +333,7 @@
                   <td class="p-4 font-medium">Almendras Marcona</td>
                   <td class="p-4">800 Kg</td>
                   <td
-                    class="p-4 font-mono text-primary/90 dark:text-primary"
+                    class="p-4 font-mono text-primary/90 dark:text-primary-dark"
                   >
                     €6.75 / Kg
                   </td>
@@ -353,7 +346,7 @@
                   <td class="p-4 font-medium">Lenteja Castellana</td>
                   <td class="p-4">5 Toneladas</td>
                   <td
-                    class="p-4 font-mono text-primary/90 dark:text-primary"
+                    class="p-4 font-mono text-primary/90 dark:text-primary-dark"
                   >
                     €1,800.00 / Ton
                   </td>
@@ -368,41 +361,40 @@
         </section>
       </main>
 
-      <!-- Footer -->
       <footer class="bg-gray-100 dark:bg-gray-900/50 mt-16">
         <div class="container mx-auto px-4 py-10 text-center">
           <div
             class="flex flex-wrap items-center justify-center gap-6"
           >
             <a
-              class="text-gray-600 dark:text-gray-400 hover:text-primary text-sm font-medium"
+              class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark text-sm font-medium"
               href="#"
               >Aviso Legal</a
             >
             <a
-              class="text-gray-600 dark:text-gray-400 hover:text-primary text-sm font-medium"
+              class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark text-sm font-medium"
               href="#"
               >FAQ</a
             >
             <a
-              class="text-gray-600 dark:text-gray-400 hover:text-primary text-sm font-medium"
+              class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark text-sm font-medium"
               href="#"
               >Sobre Nosotros</a
             >
             <a
-              class="text-gray-600 dark:text-gray-400 hover:text-primary text-sm font-medium"
+              class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark text-sm font-medium"
               href="#"
               >Servicios</a
             >
             <a
-              class="text-gray-600 dark:text-gray-400 hover:text-primary text-sm font-medium"
+              class="text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark text-sm font-medium"
               href="#"
               >Contacto</a
             >
           </div>
           <div class="flex justify-center gap-6 my-6">
             <a
-              class="text-gray-500 dark:text-gray-400 hover:text-primary"
+              class="text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark"
               href="#"
             >
               <svg
@@ -419,7 +411,7 @@
               </svg>
             </a>
             <a
-              class="text-gray-500 dark:text-gray-400 hover:text-primary"
+              class="text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark"
               href="#"
             >
               <svg
@@ -434,7 +426,7 @@
               </svg>
             </a>
             <a
-              class="text-gray-500 dark:text-gray-400 hover:text-primary"
+              class="text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-primary-dark"
               href="#"
             >
               <svg
@@ -458,7 +450,6 @@
       </footer>
     </div>
 
-    <!-- Script menú móvil -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const btn = document.getElementById("mobileMenuBtn");
