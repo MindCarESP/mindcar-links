@@ -1,58 +1,223 @@
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const client = supabase.createClient("https://TU-PROJECT-URL.supabase.co", "TU-ANON-PUBLIC-KEY");
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nueva contraseña – MindCar</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-  // 1️⃣ Leer el code que viene en la URL
-  const url = new URL(window.location.href);
-  const code = url.searchParams.get('code');
-  const type = url.searchParams.get('type');
+  <!-- Supabase JS v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  async function ensureSession() {
-    if (!code) return false;
-    try {
-      // 2️⃣ Convertir el code en sesión válida
-      const { data, error } = await client.auth.exchangeCodeForSession(code);
-      return !error;
-    } catch (_) {
-      return false;
+  <style>
+    :root {
+      color-scheme: dark;
     }
-  }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #020617;
+      color: #e5e7eb;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: #020617;
+      border-radius: 24px;
+      padding: 24px 22px 22px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.85);
+      border: 1px solid #111827;
+    }
+    h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #f9fafb;
+    }
+    p {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: #9ca3af;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: #e5e7eb;
+    }
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #1f2937;
+      background: #020617;
+      color: #f9fafb;
+      font-size: 15px;
+      outline: none;
+    }
+    input[type="password"]:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px #2563eb33;
+    }
+    button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .status {
+      margin-top: 12px;
+      font-size: 13px;
+      min-height: 18px;
+    }
+    .status.error {
+      color: #ef4444;
+    }
+    .status.ok {
+      color: #22c55e;
+    }
+    .small {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Nueva contraseña</h1>
+    <p>Introduce una nueva contraseña para tu cuenta de MindCar.</p>
 
-  // 3️⃣ Solo permitir cambiar contraseña si ya se generó sesión
-  const btn = document.getElementById("submit");
-  const status = document.getElementById("status");
+    <form id="reset-form">
+      <label for="newPass">Nueva contraseña</label>
+      <input
+        type="password"
+        id="newPass"
+        autocomplete="new-password"
+        placeholder="••••••••"
+      />
 
-  btn.onclick = async () => {
-    const password = document.getElementById("newPass").value.trim();
-    if (password.length < 6) {
-      status.textContent = "La contraseña debe tener mínimo 6 caracteres.";
-      status.style.color = "red";
-      return;
+      <button type="submit" id="submit">
+        <span id="btn-text">Cambiar contraseña</span>
+        <span id="btn-spinner" style="display:none;">⏳</span>
+      </button>
+    </form>
+
+    <div id="status" class="status"></div>
+    <p class="small">
+      Si has abierto este enlace en otro navegador o dispositivo distinto al que
+      iniciaste el proceso, es posible que el enlace no funcione.
+    </p>
+  </div>
+
+  <script>
+    // ⚠️ RELLENA ESTO CON TU PROYECTO
+    const SUPABASE_URL = "https://TU-PROJECT-URL.supabase.co";
+    const SUPABASE_ANON_KEY = "TU-PUBLIC-ANON-KEY";
+
+    const supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form   = document.getElementById("reset-form");
+    const input  = document.getElementById("newPass");
+    const status = document.getElementById("status");
+    const btn    = document.getElementById("submit");
+    const btnText = document.getElementById("btn-text");
+    const btnSpinner = document.getElementById("btn-spinner");
+
+    function setStatus(msg, type = "") {
+      status.textContent = msg || "";
+      status.className = "status" + (type ? " " + type : "");
     }
 
-    btn.disabled = true;
-    status.textContent = "Actualizando contraseña...";
-    status.style.color = "#aaa";
-
-    // 4️⃣ Garantizar sesión primero
-    const ok = await ensureSession();
-    if (!ok) {
-      status.textContent = "Error: Auth session missing";
-      status.style.color = "red";
-      btn.disabled = false;
-      return;
+    function setLoading(isLoading) {
+      btn.disabled = isLoading;
+      btnSpinner.style.display = isLoading ? "inline-block" : "none";
+      btnText.textContent = isLoading ? "Actualizando..." : "Cambiar contraseña";
     }
 
-    // 5️⃣ Ahora sí: cambiar contraseña
-    const { error } = await client.auth.updateUser({ password });
-    if (error) {
-      status.textContent = "Error: " + error.message;
-      status.style.color = "red";
-      btn.disabled = false;
-      return;
+    async function ensureSessionFromCode() {
+      const url = new URL(window.location.href);
+      const code = url.searchParams.get("code");
+      const type = url.searchParams.get("type");
+
+      if (!code) {
+        setStatus("Enlace inválido o incompleto (falta el código).", "error");
+        return false;
+      }
+
+      try {
+        const { data, error } = await supa.auth.exchangeCodeForSession(code);
+        if (error) {
+          console.error("exchangeCodeForSession error:", error);
+          setStatus("El enlace no es válido o ha expirado.", "error");
+          return false;
+        }
+        return true;
+      } catch (err) {
+        console.error("exchangeCodeForSession exception:", err);
+        setStatus("No se pudo validar el enlace de recuperación.", "error");
+        return false;
+      }
     }
 
-    status.textContent = "Contraseña cambiada correctamente. Ahora puedes iniciar sesión.";
-    status.style.color = "green";
-  };
-</script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Nada visible, pero forzamos primero el intercambio de código -> sesión
+      const ok = await ensureSessionFromCode();
+      if (!ok) {
+        // Si no hay sesión, el usuario no podrá resetear la contraseña
+        btn.disabled = true;
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const password = input.value.trim();
+
+      if (password.length < 6) {
+        setStatus("La contraseña debe tener al menos 6 caracteres.", "error");
+        return;
+      }
+
+      setLoading(true);
+      setStatus("Actualizando contraseña...");
+
+      try {
+        const { error } = await supa.auth.updateUser({ password });
+        if (error) {
+          console.error("updateUser error:", error);
+          setStatus("Error: " + error.message, "error");
+          setLoading(false);
+          return;
+        }
+
+        setStatus("Contraseña cambiada correctamente. Ya puedes iniciar sesión en la app.", "ok");
+      } catch (err) {
+        console.error("updateUser exception:", err);
+        setStatus("No se pudo cambiar la contraseña. Inténtalo de nuevo.", "error");
+      } finally {
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
