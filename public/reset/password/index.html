@@ -56,20 +56,37 @@
     .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
     .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2)); width:100%; text-align:center; display:block}
 
-    /* === footer actualizado: © a la izquierda, web arriba + mail abajo a la derecha === */
+    /* === FOOTER: 2 líneas, responsive limpio === */
     footer{
-      max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px;
-      display:flex; justify-content:space-between; align-items:flex-start; padding:0 8px;
+      max-width:700px;
+      margin:28px auto 16px;
+      color:var(--muted);
+      font-size:13px;
+      padding:4px 8px 8px;
     }
-    .f-left{align-self:flex-end; text-align:left}
-    .f-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px;}
+    .footer-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .footer-left{
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .footer-right{
+      margin-left:auto;
+      text-align:right;
+      white-space:nowrap;
+    }
+    .f-left{
+      font-weight:600;
+    }
     .web-link,.mail-link{
       color:var(--brand); text-decoration:none;
       display:inline-flex; align-items:center; gap:6px;
-    }
-    @media (max-width:520px){
-      footer{flex-direction:column; gap:8px; align-items:stretch}
-      .f-right{align-items:flex-start}
     }
   </style>
 </head>
@@ -90,6 +107,10 @@
       <p id="hint" class="lead">Validando enlace…</p>
       <p id="error" class="err hidden" aria-live="assertive"></p>
       <p id="done" class="ok hidden" aria-live="polite">Contraseña actualizada. Redirigiendo…</p>
+      <!-- Mensaje cuando el enlace ya fue usado / caducado -->
+      <p id="used" class="ok hidden" aria-live="polite">
+        Este enlace ya fue utilizado. Si necesitas cambiar tu contraseña, solicita uno nuevo desde la app.
+      </p>
 
       <form id="form" class="form-grid hidden" autocomplete="off">
         <div>
@@ -116,25 +137,34 @@
     </section>
 
     <footer>
-      <!-- IZQUIERDA: © (alineado con el card) -->
-      <div class="f-left">© <span id="year"></span> MindCar</div>
+      <!-- LÍNEA 1: izq web, dcha © año MindCar -->
+      <div class="footer-row">
+        <div class="footer-left">
+          <a href="https://mindcar.es" target="_self" rel="noopener" class="web-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
+              <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            </svg>
+            mindcar.es
+          </a>
+        </div>
+        <div class="footer-right">
+          <div class="f-left">© <span id="year"></span> MindCar</div>
+        </div>
+      </div>
 
-      <!-- DERECHA: web arriba, correo abajo -->
-      <div class="f-right">
-        <a href="https://mindcar.es" target="_self" rel="noopener" class="web-link">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
-            <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-          </svg>
-          mindcar.es
-        </a>
-        <a href="mailto:mindcar@mindcar.es" class="mail-link">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
-            <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
-            <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          mindcar@mindcar.es
-        </a>
+      <!-- LÍNEA 2: izq email, dcha vacío -->
+      <div class="footer-row">
+        <div class="footer-left">
+          <a href="mailto:mindcar@mindcar.es" class="mail-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+              <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+              <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            mindcar@mindcar.es
+          </a>
+        </div>
+        <div class="footer-right"></div>
       </div>
     </footer>
   </main>
@@ -146,11 +176,19 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M'
     const REDIRECT_AFTER_OK = 'https://mindcar.es'
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { flowType: 'implicit' } })
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { flowType: 'pkce' }
+    })
 
     const $ = (id) => document.getElementById(id)
-    const $badge = $('badge'), $hint = $('hint'), $form = $('form'), $done = $('done'), $err = $('error')
-    $('year').textContent = new Date().getFullYear()
+    const $badge = $('badge'),
+          $hint  = $('hint'),
+          $form  = $('form'),
+          $done  = $('done'),
+          $err   = $('error'),
+          $used  = $('used')
+
+    document.getElementById('year').textContent = new Date().getFullYear()
 
     // --- SVGs para el icono del ojo
     const eyeOpenSvg = `
@@ -181,28 +219,67 @@
     });
 
     // --- Verificación de enlace Supabase
+    // --- Verificación de enlace Supabase
     (async () => {
       try {
         const url = new URL(window.location.href)
+    
+        // errores que vengan en query o hash
         const errCode = url.searchParams.get('error_code') || new URLSearchParams(url.hash.slice(1)).get('error_code')
         const errDesc = url.searchParams.get('error_description') || new URLSearchParams(url.hash.slice(1)).get('error_description')
         if (errCode || errDesc) throw new Error(`${errCode || 'error'}: ${errDesc || ''}`.trim())
-
+    
+        // 👇 aquí está la clave: sacar el code que viene en {{ .ConfirmationURL }}
+        const code = url.searchParams.get('code') || new URLSearchParams(url.hash.slice(1)).get('code')
+        if (!code) throw new Error('Enlace de recuperación no válido o caducado.')
+    
         let { data: { session } } = await supabase.auth.getSession()
+    
         if (!session) {
-          const { error } = await supabase.auth.exchangeCodeForSession(window.location.href)
+          // 👇 ahora sí: pasamos SOLO el code
+          const { error } = await supabase.auth.exchangeCodeForSession(code)
           if (error) throw error
           ;({ data: { session } } = await supabase.auth.getSession())
         }
+    
         if (!session) throw new Error('Enlace de recuperación no válido o caducado.')
-
+    
+        // Enlace OK → mostramos el formulario
         $hint.classList.add('hidden')
         $badge.classList.remove('hidden')
         $form.classList.remove('hidden')
       } catch (e) {
+        console.error(e)
+    
         $hint.classList.add('hidden')
-        $err.textContent = e.message || 'No se pudo validar el enlace.'
-        $err.classList.remove('hidden')
+        $badge.classList.add('hidden')
+        $form.classList.add('hidden')
+        $done.classList.add('hidden')
+        $err.classList.add('hidden')
+        $used.classList.add('hidden')
+    
+        let isUsedLink = false
+        if (typeof e.message === 'string') {
+          const m = e.message.toLowerCase()
+          if (
+            m.includes('invalid request') ||
+            m.includes('auth code') ||
+            m.includes('code verifier') ||
+            m.includes('invalid_grant') ||
+            m.includes('recovery') ||
+            m.includes('caducado') ||
+            m.includes('expired')
+          ) {
+            isUsedLink = true
+          }
+        }
+    
+        if (isUsedLink) {
+          $used.classList.remove('hidden')
+        } else {
+          $err.textContent = 'No se pudo validar el enlace. Solicita uno nuevo desde la app.'
+          $err.classList.remove('hidden')
+        }
       }
     })();
 
@@ -226,7 +303,10 @@
       }
     })
 
-    function showError(msg){ $err.textContent = msg; $err.classList.remove('hidden') }
+    function showError(msg){
+      $err.textContent = msg;
+      $err.classList.remove('hidden');
+    }
   </script>
 </body>
 </html>
