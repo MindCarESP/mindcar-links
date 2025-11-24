@@ -213,16 +213,14 @@
         const url = new URL(window.location.href)
         const errCode = url.searchParams.get('error_code') || new URLSearchParams(url.hash.slice(1)).get('error_code')
         const errDesc = url.searchParams.get('error_description') || new URLSearchParams(url.hash.slice(1)).get('error_description')
-        if (errCode || errDesc) throw new Error(`${errCode || 'error'}: ${errDesc || ''}`.trim())
-
-        let { data: { session } } = await supabase.auth.getSession()
-        if (!session) {
-          const { error } = await supabase.auth.exchangeCodeForSession(window.location.href)
-          if (error) throw error
-          ;({ data: { session } } = await supabase.auth.getSession())
+        if (errCode || errDesc) {
+          throw new Error(`${errCode || 'error'}: ${errDesc || ''}`.trim())
         }
+    
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+        if (sessionError) throw sessionError
         if (!session) throw new Error('Enlace de recuperación no válido o caducado.')
-
+    
         $hint.classList.add('hidden')
         $badge.classList.remove('hidden')
         $form.classList.remove('hidden')
