@@ -130,94 +130,96 @@
     </p>
   </div>
 
-  <script>
-    // ⚠️ RELLENA ESTO CON TU PROYECTO
-    const SUPABASE_URL = "https://ltbnqaqammaxtksprptt.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M";
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // ⚠️ NO CAMBIES ESTOS DOS, solo copia tus valores
+  const SUPABASE_URL = "https://ltbnqaqammaxtksprptt.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M";
 
-    const supa = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseLib = window.supabase;
+  const supa = supabaseLib.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const form   = document.getElementById("reset-form");
-    const input  = document.getElementById("newPass");
-    const status = document.getElementById("status");
-    const btn    = document.getElementById("submit");
-    const btnText = document.getElementById("btn-text");
-    const btnSpinner = document.getElementById("btn-spinner");
+  const form        = document.getElementById("reset-form");
+  const input       = document.getElementById("newPass");
+  const statusEl    = document.getElementById("status");
+  const btn         = document.getElementById("submit");
+  const btnText     = document.getElementById("btn-text");
+  const btnSpinner  = document.getElementById("btn-spinner");
 
-    function setStatus(msg, type = "") {
-      status.textContent = msg || "";
-      status.className = "status" + (type ? " " + type : "");
-    }
+  function setStatus(msg, type = "") {
+    statusEl.textContent = msg || "";
+    statusEl.className = "status" + (type ? " " + type : "");
+  }
 
-    function setLoading(isLoading) {
-      btn.disabled = isLoading;
-      btnSpinner.style.display = isLoading ? "inline-block" : "none";
-      btnText.textContent = isLoading ? "Actualizando..." : "Cambiar contraseña";
-    }
+  function setLoading(isLoading) {
+    btn.disabled = isLoading;
+    btnSpinner.style.display = isLoading ? "inline-block" : "none";
+    btnText.textContent = isLoading ? "Actualizando..." : "Cambiar contraseña";
+  }
 
-    async function ensureSessionFromCode() {
-      const url = new URL(window.location.href);
-      const code = url.searchParams.get("code");
-      const type = url.searchParams.get("type");
+  // 1) Verificar que existe sesión creada por Supabase al llegar desde el email
+  document.addEventListener("DOMContentLoaded", async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supa.auth.getSession();
 
-      if (!code) {
-        setStatus("Enlace inválido o incompleto (falta el código).", "error");
-        return false;
-      }
-
-      try {
-        const { data, error } = await supa.auth.exchangeCodeForSession(code);
-        if (error) {
-          console.error("exchangeCodeForSession error:", error);
-          setStatus("El enlace no es válido o ha expirado.", "error");
-          return false;
-        }
-        return true;
-      } catch (err) {
-        console.error("exchangeCodeForSession exception:", err);
-        setStatus("No se pudo validar el enlace de recuperación.", "error");
-        return false;
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      // Nada visible, pero forzamos primero el intercambio de código -> sesión
-      const ok = await ensureSessionFromCode();
-      if (!ok) {
-        // Si no hay sesión, el usuario no podrá resetear la contraseña
+      if (error) {
+        console.error("getSession error:", error);
+        setStatus("No se pudo validar el enlace. Vuelve a solicitarlo.", "error");
         btn.disabled = true;
-      }
-    });
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const password = input.value.trim();
-
-      if (password.length < 6) {
-        setStatus("La contraseña debe tener al menos 6 caracteres.", "error");
         return;
       }
 
-      setLoading(true);
-      setStatus("Actualizando contraseña...");
-
-      try {
-        const { error } = await supa.auth.updateUser({ password });
-        if (error) {
-          console.error("updateUser error:", error);
-          setStatus("Error: " + error.message, "error");
-          setLoading(false);
-          return;
-        }
-
-        setStatus("Contraseña cambiada correctamente. Ya puedes iniciar sesión en la app.", "ok");
-      } catch (err) {
-        console.error("updateUser exception:", err);
-        setStatus("No se pudo cambiar la contraseña. Inténtalo de nuevo.", "error");
-      } finally {
-        setLoading(false);
+      if (!data.session) {
+        // No hay sesión -> el enlace es inválido o ha caducado
+        setStatus("El enlace no es válido o ha expirado. Pide otro desde la app.", "error");
+        btn.disabled = true;
+        return;
       }
-    });
-  </script>
+
+      // Todo OK: el usuario está autenticado en modo recovery
+      setStatus("", "");
+    } catch (err) {
+      console.error("getSession exception:", err);
+      setStatus("No se pudo validar el enlace de recuperación.", "error");
+      btn.disabled = true;
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  // 2) Enviar nueva contraseña
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const password = input.value.trim();
+
+    if (password.length < 6) {
+      setStatus("La contraseña debe tener al menos 6 caracteres.", "error");
+      return;
+    }
+
+    setLoading(true);
+    setStatus("Actualizando contraseña...");
+
+    try {
+      const { error } = await supa.auth.updateUser({ password });
+      if (error) {
+        console.error("updateUser error:", error);
+        setStatus("Error: " + error.message, "error");
+        return;
+      }
+
+      setStatus(
+        "Contraseña cambiada correctamente. Ya puedes iniciar sesión en la app.",
+        "ok"
+      );
+    } catch (err) {
+      console.error("updateUser exception:", err);
+      setStatus("No se pudo cambiar la contraseña. Inténtalo de nuevo.", "error");
+    } finally {
+      setLoading(false);
+    }
+  });
+</script>
 </body>
 </html>
