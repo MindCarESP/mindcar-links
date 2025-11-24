@@ -69,7 +69,7 @@
       justify-content:space-between;
       align-items:center;
       gap:8px;
-      flex-wrap:wrap;
+      flex-wrap:wrap; /* permite wrap suave en móvil muy estrecho */
     }
     .footer-left{
       display:flex;
@@ -81,7 +81,7 @@
       text-align:right;
       white-space:nowrap;
     }
-    .f-left{
+    .f-left{ /* se mantiene el estilo que querías para © año MindCar */
       font-weight:600;
     }
     .web-link,.mail-link{
@@ -107,10 +107,6 @@
       <p id="hint" class="lead">Validando enlace…</p>
       <p id="error" class="err hidden" aria-live="assertive"></p>
       <p id="done" class="ok hidden" aria-live="polite">Contraseña actualizada. Redirigiendo…</p>
-      <!-- Mensaje cuando el enlace ya fue usado / caducado -->
-      <p id="used" class="ok hidden" aria-live="polite">
-        Este enlace ya fue utilizado. Si necesitas cambiar tu contraseña, solicita uno nuevo desde la app.
-      </p>
 
       <form id="form" class="form-grid hidden" autocomplete="off">
         <div>
@@ -149,6 +145,7 @@
           </a>
         </div>
         <div class="footer-right">
+          <!-- Manteniendo tu estilo -->
           <div class="f-left">© <span id="year"></span> MindCar</div>
         </div>
       </div>
@@ -179,14 +176,8 @@
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { flowType: 'implicit' } })
 
     const $ = (id) => document.getElementById(id)
-    const $badge = $('badge'),
-          $hint  = $('hint'),
-          $form  = $('form'),
-          $done  = $('done'),
-          $err   = $('error'),
-          $used  = $('used')
-
-    document.getElementById('year').textContent = new Date().getFullYear()
+    const $badge = $('badge'), $hint = $('hint'), $form = $('form'), $done = $('done'), $err = $('error')
+    $('year').textContent = new Date().getFullYear()
 
     // --- SVGs para el icono del ojo
     const eyeOpenSvg = `
@@ -232,45 +223,13 @@
         }
         if (!session) throw new Error('Enlace de recuperación no válido o caducado.')
 
-        // Enlace OK → mostramos el formulario
         $hint.classList.add('hidden')
         $badge.classList.remove('hidden')
         $form.classList.remove('hidden')
       } catch (e) {
-        console.error(e)
-
-        // Ocultamos todo lo demás
         $hint.classList.add('hidden')
-        $badge.classList.add('hidden')
-        $form.classList.add('hidden')
-        $done.classList.add('hidden')
-        $err.classList.add('hidden')
-        $used.classList.add('hidden')
-
-        let isUsedLink = false
-        if (typeof e.message === 'string') {
-          const m = e.message.toLowerCase()
-          if (
-            m.includes('invalid request') ||
-            m.includes('auth code') ||
-            m.includes('code verifier') ||
-            m.includes('invalid_grant') ||
-            m.includes('recovery') ||
-            m.includes('caducado') ||
-            m.includes('expired')
-          ) {
-            isUsedLink = true
-          }
-        }
-
-        if (isUsedLink) {
-          // Enlace reutilizado / caducado → solo mensaje "ya fue utilizado"
-          $used.classList.remove('hidden')
-        } else {
-          // Error genérico
-          $err.textContent = 'No se pudo validar el enlace. Solicita uno nuevo desde la app.'
-          $err.classList.remove('hidden')
-        }
+        $err.textContent = e.message || 'No se pudo validar el enlace.'
+        $err.classList.remove('hidden')
       }
     })();
 
@@ -294,10 +253,7 @@
       }
     })
 
-    function showError(msg){
-      $err.textContent = msg;
-      $err.classList.remove('hidden');
-    }
+    function showError(msg){ $err.textContent = msg; $err.classList.remove('hidden') }
   </script>
 </body>
 </html>
