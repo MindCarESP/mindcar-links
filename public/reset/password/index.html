@@ -56,20 +56,44 @@
     .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
     .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2)); width:100%; text-align:center; display:block}
 
-    /* === footer actualizado: © a la izquierda, web arriba + mail abajo a la derecha === */
+    /* Footer en dos líneas:
+       1ª: izquierda web, derecha © año MindCar
+       2ª: izquierda email, derecha vacío */
     footer{
       max-width:700px; margin:20px auto 6px; color:var(--muted); font-size:13px;
-      display:flex; justify-content:space-between; align-items:flex-start; padding:0 8px;
+      display:flex; flex-direction:column; gap:4px; padding:0 8px;
     }
-    .f-left{align-self:flex-end; text-align:left}
-    .f-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px;}
+    .footer-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .footer-left{
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .footer-right{
+      text-align:right;
+      font-weight:600;
+    }
+    .f-left{ /* se mantiene para el bloque © año MindCar */
+      text-align:right;
+    }
     .web-link,.mail-link{
       color:var(--brand); text-decoration:none;
       display:inline-flex; align-items:center; gap:6px;
     }
     @media (max-width:520px){
-      footer{flex-direction:column; gap:8px; align-items:stretch}
-      .f-right{align-items:flex-start}
+      .footer-row{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:4px;
+      }
+      .footer-right,
+      .f-left{
+        text-align:left;
+      }
     }
   </style>
 </head>
@@ -116,25 +140,35 @@
     </section>
 
     <footer>
-      <!-- IZQUIERDA: © (alineado con el card) -->
-      <div class="f-left">© <span id="year"></span> MindCar</div>
+      <!-- LÍNEA 1: izquierda web, derecha © año MindCar -->
+      <div class="footer-row">
+        <div class="footer-left">
+          <a href="https://mindcar.es" target="_self" rel="noopener" class="web-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
+              <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            </svg>
+            mindcar.es
+          </a>
+        </div>
+        <div class="footer-right">
+          <!-- Se mantiene EXACTO este estilo -->
+          <div class="f-left">© <span id="year"></span> MindCar</div>
+        </div>
+      </div>
 
-      <!-- DERECHA: web arriba, correo abajo -->
-      <div class="f-right">
-        <a href="https://mindcar.es" target="_self" rel="noopener" class="web-link">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
-            <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-          </svg>
-          mindcar.es
-        </a>
-        <a href="mailto:mindcar@mindcar.es" class="mail-link">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
-            <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
-            <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          mindcar@mindcar.es
-        </a>
+      <!-- LÍNEA 2: izquierda email, derecha vacío -->
+      <div class="footer-row">
+        <div class="footer-left">
+          <a href="mailto:mindcar@mindcar.es" class="mail-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
+              <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+              <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            mindcar@mindcar.es
+          </a>
+        </div>
+        <div class="footer-right"></div>
       </div>
     </footer>
   </main>
