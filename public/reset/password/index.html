@@ -1,264 +1,485 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Restablecer contraseña — MindCar</title>
-  <meta name="description" content="Restablece tu contraseña de MindCar de forma segura.">
-  <meta name="theme-color" content="#0b1220">
-  <link rel="icon" href="/logo-full.png">
-  <style>
-    :root{
-      --bg:#0b1220; --ink:#e8f1ff; --muted:#a6b9d4;
-      --brand:#10b981; --brand-2:#06b6d4;
-      --card:#102332; --stroke:#0f2a3a;
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--ink);
-      background: linear-gradient(180deg,#0a1622 0%,#0c1826 40%,#0b1220 100%);
-      font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
-      line-height:1.5; text-align:center; padding:clamp(12px,2.5vw,20px);
-    }
-    .wrap{max-width:960px;margin-inline:auto}
-    .logo{width:min(320px,75%);margin:16px auto 8px;filter:drop-shadow(0 0 10px rgba(0,0,0,.35))}
-    .card{
-      background:var(--card); border:1px solid var(--stroke); border-radius:var(--radius);
-      padding:clamp(18px,2.8vw,26px); max-width:700px; margin:8px auto 0; text-align:left;
-    }
-    .badge-ok{
-      display:inline-flex; align-items:center; gap:8px;
-      color:var(--brand); font-weight:700; margin:0 0 8px;
-      background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.25);
-      border-radius:999px; padding:6px 10px;
-    }
-    .title{font-size:clamp(22px,3.2vw,34px); font-weight:800; margin:0 0 12px}
-    .lead{color:var(--muted); margin:0 0 14px}
-    .err{color:#ff6b6b; font-weight:700}
-    .ok{color:#19d18f; font-weight:700}
-    .hidden{display:none}
-    .form-grid{display:grid; gap:12px; margin-top:12px}
-    label{font-weight:700}
-    .field{
-      display:flex; align-items:center; gap:8px;
-      background:#0b1c29; border:1px solid #163346; border-radius:14px; padding:8px 12px
-    }
-    .field input{
-      flex:1; background:transparent; border:0; outline:none; color:var(--ink);
-      font-size:16px; padding:6px 6px;
-    }
-    .field input::placeholder{ color:rgba(166,185,212,.45) }
-    .toggle-eye{background:transparent; border:0; cursor:pointer; padding:4px; border-radius:8px; color:var(--muted)}
-    .hint{color:var(--muted); font-size:13px; margin:6px 2px 0}
-    .actions{margin-top:8px}
-    .btn{appearance:none; cursor:pointer; padding:14px 18px; border-radius:16px; border:0; font-weight:900; font-size:16px}
-    .btn-primary{color:#06141a; background:linear-gradient(135deg,var(--brand),var(--brand-2)); width:100%; text-align:center; display:block}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Restablecer contraseña — MindCar</title>
+    <meta name="description" content="Restablece tu contraseña de MindCar de forma segura.">
+    <meta name="theme-color" content="#0b1220">
+    <link rel="icon" href="/logo-full.png">
 
-    /* === FOOTER: 2 líneas, responsive limpio === */
-    footer{
-      max-width:700px;
-      margin:28px auto 16px;
-      color:var(--muted);
-      font-size:13px;
-      padding:4px 8px 8px;
-    }
-    .footer-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      flex-wrap:wrap; /* permite wrap suave en móvil muy estrecho */
-    }
-    .footer-left{
-      display:flex;
-      align-items:center;
-      gap:6px;
-    }
-    .footer-right{
-      margin-left:auto;
-      text-align:right;
-      white-space:nowrap;
-    }
-    .f-left{ /* se mantiene el estilo que querías para © año MindCar */
-      font-weight:600;
-    }
-    .web-link,.mail-link{
-      color:var(--brand); text-decoration:none;
-      display:inline-flex; align-items:center; gap:6px;
-    }
-  </style>
-</head>
-<body>
-  <main class="wrap" role="main">
-    <img src="/logo-full-app.svg" alt="MindCar" class="logo" />
-    <section class="card" aria-labelledby="reset-title">
-      <p id="badge" class="badge-ok hidden" aria-live="polite">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 3l6 2.6V10c0 4.4-2.9 8.5-6 10-3.1-1.5-6-5.6-6-10V5.6L12 3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
-          <path d="M8.7 12.6l2 2 4-4.6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Enlace verificado
-      </p>
+    <style>
+      :root{
+        --bg:#0b1220;
+        --ink:#e8f1ff;
+        --muted:#a6b9d4;
+        --brand:#10b981;
+        --brand-2:#06b6d4;
+        --card:#102332;
+        --stroke:#0f2a3a;
+        --radius:18px;
+      }
 
-      <h1 id="reset-title" class="title">Restablecer contraseña</h1>
+      *{
+        box-sizing:border-box
+      }
 
-      <p id="hint" class="lead">Validando enlace…</p>
-      <p id="error" class="err hidden" aria-live="assertive"></p>
-      <p id="done" class="ok hidden" aria-live="polite">Contraseña actualizada. Redirigiendo…</p>
+      html,body{
+        height:100%
+      }
 
-      <form id="form" class="form-grid hidden" autocomplete="off">
-        <div>
-          <label for="pass1">Nueva contraseña</label>
-          <div class="field">
-            <input id="pass1" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••">
-            <button type="button" class="toggle-eye" data-toggle="pass1" aria-label="Mostrar contraseña"></button>
+      body{
+        margin:0;
+        color:var(--ink);
+        background: linear-gradient(180deg,#0a1622 0%,#0c1826 40%,#0b1220 100%);
+        font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+        line-height:1.5;
+        text-align:center;
+        padding:clamp(12px,2.5vw,20px);
+      }
+
+      .wrap{
+        max-width:960px;
+        margin-inline:auto
+      }
+
+      .logo{
+        width:min(320px,75%);
+        margin:16px auto 8px;
+        filter:drop-shadow(0 0 10px rgba(0,0,0,.35))
+      }
+
+      .card{
+        background:var(--card);
+        border:1px solid var(--stroke);
+        border-radius:var(--radius);
+        padding:clamp(18px,2.8vw,26px);
+        max-width:700px;
+        margin:8px auto 0;
+        text-align:left;
+      }
+
+      .badge-ok{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        color:var(--brand);
+        font-weight:700;
+        margin:0 0 8px;
+        background:rgba(16,185,129,.08);
+        border:1px solid rgba(16,185,129,.25);
+        border-radius:999px;
+        padding:6px 10px;
+      }
+
+      .title{
+        font-size:clamp(22px,3.2vw,34px);
+        font-weight:800;
+        margin:0 0 12px
+      }
+
+      .lead{
+        color:var(--muted);
+        margin:0 0 14px
+      }
+
+      .err{
+        color:#ff6b6b;
+        font-weight:700
+      }
+
+      .ok{
+        color:#19d18f;
+        font-weight:700
+      }
+
+      .hidden{
+        display:none
+      }
+
+      .form-grid{
+        display:grid;
+        gap:12px;
+        margin-top:12px
+      }
+
+      label{
+        font-weight:700
+      }
+
+      .field{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        background:#0b1c29;
+        border:1px solid #163346;
+        border-radius:14px;
+        padding:8px 12px
+      }
+
+      .field input{
+        flex:1;
+        background:transparent;
+        border:0;
+        outline:none;
+        color:var(--ink);
+        font-size:16px;
+        padding:6px 6px;
+      }
+
+      .field input::placeholder{
+        color:rgba(166,185,212,.45)
+      }
+
+      .toggle-eye{
+        background:transparent;
+        border:0;
+        cursor:pointer;
+        padding:4px;
+        border-radius:8px;
+        color:var(--muted)
+      }
+
+      .hint{
+        color:var(--muted);
+        font-size:13px;
+        margin:6px 2px 0
+      }
+
+      .actions{
+        margin-top:8px
+      }
+
+      .btn{
+        appearance:none;
+        cursor:pointer;
+        padding:14px 18px;
+        border-radius:16px;
+        border:0;
+        font-weight:900;
+        font-size:16px
+      }
+
+      .btn-primary{
+        color:#06141a;
+        background:linear-gradient(135deg,var(--brand),var(--brand-2));
+        width:100%;
+        text-align:center;
+        display:block
+      }
+
+      /* === footer actualizado: © a la izquierda, web arriba + mail abajo a la derecha === */
+      footer{
+        max-width:700px;
+        margin:20px auto 6px;
+        color:var(--muted);
+        font-size:13px;
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        padding:0 8px;
+      }
+
+      .f-left{
+        align-self:flex-end;
+        text-align:left
+      }
+
+      .f-right{
+        display:flex;
+        flex-direction:column;
+        align-items:flex-end;
+        gap:6px;
+      }
+
+      .web-link,.mail-link{
+        color:var(--brand);
+        text-decoration:none;
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+      }
+
+      @media (max-width:520px){
+        footer{
+          flex-direction:column;
+          gap:8px;
+          align-items:stretch
+        }
+
+        .f-right{
+          align-items:flex-start
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="wrap" role="main">
+      <img src="/logo-full-app.svg" alt="MindCar" class="logo" />
+
+      <section class="card" aria-labelledby="reset-title">
+        <p id="badge" class="badge-ok hidden" aria-live="polite">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M12 3l6 2.6V10c0 4.4-2.9 8.5-6 10-3.1-1.5-6-5.6-6-10V5.6L12 3z"
+              stroke="currentColor"
+              stroke-width="1.6"
+              fill="none"
+            />
+            <path
+              d="M8.7 12.6l2 2 4-4.6"
+              stroke="currentColor"
+              stroke-width="1.6"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Enlace verificado
+        </p>
+
+        <h1 id="reset-title" class="title">Restablecer contraseña</h1>
+        <p id="hint" class="lead">Validando enlace…</p>
+        <p id="error" class="err hidden" aria-live="assertive"></p>
+        <p id="done" class="ok hidden" aria-live="polite">Contraseña actualizada. Redirigiendo…</p>
+
+        <form id="form" class="form-grid hidden" autocomplete="off">
+          <div>
+            <label for="pass1">Nueva contraseña</label>
+            <div class="field">
+              <input
+                id="pass1"
+                type="password"
+                required
+                minlength="6"
+                autocomplete="new-password"
+                placeholder="••••••"
+              >
+              <button
+                type="button"
+                class="toggle-eye"
+                data-toggle="pass1"
+                aria-label="Mostrar contraseña"
+              ></button>
+            </div>
+            <p class="hint">Mínimo 6 caracteres.</p>
           </div>
-          <p class="hint">Mínimo 6 caracteres.</p>
-        </div>
 
-        <div>
-          <label for="pass2">Repite la contraseña</label>
-          <div class="field">
-            <input id="pass2" type="password" required minlength="6" autocomplete="new-password" placeholder="••••••">
-            <button type="button" class="toggle-eye" data-toggle="pass2" aria-label="Mostrar contraseña"></button>
+          <div>
+            <label for="pass2">Repite la contraseña</label>
+            <div class="field">
+              <input
+                id="pass2"
+                type="password"
+                required
+                minlength="6"
+                autocomplete="new-password"
+                placeholder="••••••"
+              >
+              <button
+                type="button"
+                class="toggle-eye"
+                data-toggle="pass2"
+                aria-label="Mostrar contraseña"
+              ></button>
+            </div>
           </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">Guardar contraseña</button>
+          </div>
+        </form>
+      </section>
+
+      <footer>
+        <!-- IZQUIERDA: © (alineado con el card) -->
+        <div class="f-left">
+          © <span id="year"></span> MindCar
         </div>
 
-        <div class="actions">
-          <button class="btn btn-primary" type="submit">Guardar contraseña</button>
-        </div>
-      </form>
-    </section>
-
-    <footer>
-      <!-- LÍNEA 1: izq web, dcha © año MindCar -->
-      <div class="footer-row">
-        <div class="footer-left">
-          <a href="https://mindcar.es" target="_self" rel="noopener" class="web-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" fill="none"/>
-              <path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <!-- DERECHA: web arriba, correo abajo -->
+        <div class="f-right">
+          <a
+            href="https://mindcar.es"
+            target="_self"
+            rel="noopener"
+            class="web-link"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              style="color:var(--brand)"
+              aria-hidden="true"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+                stroke="currentColor"
+                stroke-width="1.6"
+                fill="none"
+              />
+              <path
+                d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"
+                stroke="currentColor"
+                stroke-width="1.6"
+                fill="none"
+                stroke-linecap="round"
+              />
             </svg>
             mindcar.es
           </a>
-        </div>
-        <div class="footer-right">
-          <!-- Manteniendo tu estilo -->
-          <div class="f-left">© <span id="year"></span> MindCar</div>
-        </div>
-      </div>
 
-      <!-- LÍNEA 2: izq email, dcha vacío -->
-      <div class="footer-row">
-        <div class="footer-left">
           <a href="mailto:mindcar@mindcar.es" class="mail-link">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:var(--brand)" aria-hidden="true">
-              <path d="M3 6h18v12H3z" stroke="currentColor" stroke-width="1.6" fill="none"/>
-              <path d="M3 7l9 6 9-6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              style="color:var(--brand)"
+              aria-hidden="true"
+            >
+              <path
+                d="M3 6h18v12H3z"
+                stroke="currentColor"
+                stroke-width="1.6"
+                fill="none"
+              />
+              <path
+                d="M3 7l9 6 9-6"
+                stroke="currentColor"
+                stroke-width="1.6"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
             mindcar@mindcar.es
           </a>
         </div>
-        <div class="footer-right"></div>
-      </div>
-    </footer>
-  </main>
+      </footer>
+    </main>
 
-  <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+    <script type="module">
+      import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-    const SUPABASE_URL = 'https://ltbnqaqammaxtksprptt.supabase.co'
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M'
-    const REDIRECT_AFTER_OK = 'https://mindcar.es'
+      const SUPABASE_URL = 'https://ltbnqaqammaxtksprptt.supabase.co'
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M'
+      const REDIRECT_AFTER_OK = 'https://mindcar.es'
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { flowType: 'implicit' } })
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          flowType: 'implicit'
+        }
+      })
 
-    const $ = (id) => document.getElementById(id)
-    const $badge = $('badge'), $hint = $('hint'), $form = $('form'), $done = $('done'), $err = $('error')
-    $('year').textContent = new Date().getFullYear()
+      const $ = (id) => document.getElementById(id)
+      const $badge = $('badge'),
+        $hint = $('hint'),
+        $form = $('form'),
+        $done = $('done'),
+        $err = $('error')
 
-    // --- SVGs para el icono del ojo
-    const eyeOpenSvg = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
-        <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
-      </svg>`;
-    const eyeOffSvg = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
-        <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
-        <path d="M4 20L20 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-      </svg>`;
+      $('year').textContent = new Date().getFullYear()
 
-    // --- Toggle del ojo con cambio de icono dinámico
-    document.querySelectorAll('[data-toggle]').forEach(btn => {
-      const input = document.getElementById(btn.getAttribute('data-toggle'));
-      const updateIcon = () => {
-        const visible = input.type === 'text';
-        btn.innerHTML = visible ? eyeOffSvg : eyeOpenSvg;
-        btn.setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña');
-      };
-      updateIcon();
-      btn.addEventListener('click', () => {
-        input.type = input.type === 'password' ? 'text' : 'password';
-        updateIcon();
-      });
-    });
+      // --- SVGs para el icono del ojo
+      const eyeOpenSvg =
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+        </svg>;
 
-    // --- Verificación de enlace Supabase
-(async () => {
-  try {
-    const url = new URL(window.location.href)
-    const errCode = url.searchParams.get('error_code') || new URLSearchParams(url.hash.slice(1)).get('error_code')
-    const errDesc = url.searchParams.get('error_description') || new URLSearchParams(url.hash.slice(1)).get('error_description')
-    if (errCode || errDesc) {
-      throw new Error(`${errCode || 'error'}: ${errDesc || ''}`.trim())
-    }
+      const eyeOffSvg =
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+          <path d="M4 20L20 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>;
 
-    let { data: { session } } = await supabase.auth.getSession()
+      // --- Toggle del ojo con cambio de icono dinámico
+      document.querySelectorAll('[data-toggle]').forEach(btn => {
+        const input = document.getElementById(btn.getAttribute('data-toggle'))
 
-    if (!session) {
-      const { error } = await supabase.auth.exchangeCodeForSession(window.location.href)
-      if (error) throw error
-      ;({ data: { session } } = await supabase.auth.getSession())
-    }
+        const updateIcon = () => {
+          const visible = input.type === 'text'
+          btn.innerHTML = visible ? eyeOffSvg : eyeOpenSvg
+          btn.setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña')
+        }
 
-    if (!session) throw new Error('Enlace de recuperación no válido o caducado.')
+        updateIcon()
 
-    $hint.classList.add('hidden')
-    $badge.classList.remove('hidden')
-    $form.classList.remove('hidden')
-  } catch (e) {
-    $hint.classList.add('hidden')
-    $err.textContent = e.message || 'No se pudo validar el enlace.'
-    $err.classList.remove('hidden')
-  }
-})();
+        btn.addEventListener('click', () => {
+          input.type = input.type === 'password' ? 'text' : 'password'
+          updateIcon()
+        })
+      })
 
+      // --- Verificación de enlace Supabase
+      (async () => {
+        try {
+          const url = new URL(window.location.href)
 
-    // --- Envío del formulario
-    $form.addEventListener('submit', async (ev) => {
-      ev.preventDefault()
-      $err.classList.add('hidden')
-      const p1 = document.getElementById('pass1').value.trim()
-      const p2 = document.getElementById('pass2').value.trim()
-      if (p1 !== p2) return showError('Las contraseñas no coinciden.')
-      if (p1.length < 6) return showError('Mínimo 6 caracteres.')
+          const errCode =
+            url.searchParams.get('error_code') ||
+            new URLSearchParams(url.hash.slice(1)).get('error_code')
 
-      try {
-        const { error } = await supabase.auth.updateUser({ password: p1 })
-        if (error) throw error
-        $form.classList.add('hidden')
-        $done.classList.remove('hidden')
-        setTimeout(() => window.location.assign(REDIRECT_AFTER_OK), 1200)
-      } catch (e) {
-        showError(e.message || 'No se pudo actualizar la contraseña.')
+          const errDesc =
+            url.searchParams.get('error_description') ||
+            new URLSearchParams(url.hash.slice(1)).get('error_description')
+
+          if (errCode || errDesc) throw new Error(${errCode || 'error'}: ${errDesc || ''}.trim())
+
+          let { data: { session } } = await supabase.auth.getSession()
+
+          if (!session) {
+            const { error } = await supabase.auth.exchangeCodeForSession(window.location.href)
+            if (error) throw error
+            ;({ data: { session } } = await supabase.auth.getSession())
+          }
+
+          if (!session) throw new Error('Enlace de recuperación no válido o caducado.')
+
+          $hint.classList.add('hidden')
+          $badge.classList.remove('hidden')
+          $form.classList.remove('hidden')
+        } catch (e) {
+          $hint.classList.add('hidden')
+          $err.textContent = e.message || 'No se pudo validar el enlace.'
+          $err.classList.remove('hidden')
+        }
+      })()
+
+      // --- Envío del formulario
+      $form.addEventListener('submit', async (ev) => {
+        ev.preventDefault()
+        $err.classList.add('hidden')
+
+        const p1 = document.getElementById('pass1').value.trim()
+        const p2 = document.getElementById('pass2').value.trim()
+
+        if (p1 !== p2) return showError('Las contraseñas no coinciden.')
+        if (p1.length < 6) return showError('Mínimo 6 caracteres.')
+
+        try {
+          const { error } = await supabase.auth.updateUser({ password: p1 })
+          if (error) throw error
+
+          $form.classList.add('hidden')
+          $done.classList.remove('hidden')
+
+          setTimeout(() => window.location.assign(REDIRECT_AFTER_OK), 1200)
+        } catch (e) {
+          showError(e.message || 'No se pudo actualizar la contraseña.')
+        }
+      })
+
+      function showError(msg){
+        $err.textContent = msg;
+        $err.classList.remove('hidden')
       }
-    })
-
-    function showError(msg){ $err.textContent = msg; $err.classList.remove('hidden') }
-  </script>
-</body>
+    </script>
+  </body>
 </html>
