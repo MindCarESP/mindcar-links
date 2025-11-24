@@ -163,102 +163,143 @@
   </main>
 
   <script type="module">
-    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-    const SUPABASE_URL = 'https://ltbnqaqammaxtksprptt.supabase.co'
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M'
-    const REDIRECT_AFTER_OK = 'https://mindcar.es'
+  const SUPABASE_URL = 'https://ltbnqaqammaxtksprptt.supabase.co'
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx0Ym5xYXFhbW1heHRrc3BycHR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIzNDgwNjksImV4cCI6MjA3NzkyNDA2OX0.r4zfsTHNqAPwGR0gdTFPVtpI5PuW1A_AHZdXdKDfg1M'
+  const REDIRECT_AFTER_OK = 'https://mindcar.es'
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: { flowType: 'implicit' }
-    })
+  // No PKCE aquí, solo implícito
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { flowType: 'implicit' }
+  })
 
-    const $ = (id) => document.getElementById(id)
-    const $badge = $('badge'),
-          $hint  = $('hint'),
-          $form  = $('form'),
-          $done  = $('done'),
-          $err   = $('error'),
-          $used  = $('used')
+  const $ = (id) => document.getElementById(id)
+  const $badge = $('badge'),
+        $hint  = $('hint'),
+        $form  = $('form'),
+        $done  = $('done'),
+        $err   = $('error'),
+        $used  = $('used')
 
-    document.getElementById('year').textContent = new Date().getFullYear()
+  document.getElementById('year').textContent = new Date().getFullYear()
 
-    // Iconos ojo
-    const eyeOpenSvg = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
-        <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
-      </svg>`;
-    const eyeOffSvg = `
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
-        <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
-        <path d="M4 20L20 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-      </svg>`;
+  // --- SVGs ojo
+  const eyeOpenSvg = `
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+    </svg>`;
+  const eyeOffSvg = `
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z" stroke="currentColor" stroke-width="1.6"/>
+      <circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.6" fill="none"/>
+      <path d="M4 20L20 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>`;
 
-    document.querySelectorAll('[data-toggle]').forEach(btn => {
-      const input = document.getElementById(btn.getAttribute('data-toggle'));
-      const updateIcon = () => {
-        const visible = input.type === 'text';
-        btn.innerHTML = visible ? eyeOffSvg : eyeOpenSvg;
-        btn.setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña');
-      };
+  document.querySelectorAll('[data-toggle]').forEach(btn => {
+    const input = document.getElementById(btn.getAttribute('data-toggle'));
+    const updateIcon = () => {
+      const visible = input.type === 'text';
+      btn.innerHTML = visible ? eyeOffSvg : eyeOpenSvg;
+      btn.setAttribute('aria-label', visible ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    };
+    updateIcon();
+    btn.addEventListener('click', () => {
+      input.type = input.type === 'password' ? 'text' : 'password';
       updateIcon();
-      btn.addEventListener('click', () => {
-        input.type = input.type === 'password' ? 'text' : 'password';
-        updateIcon();
-      });
     });
+  });
 
-    // Validación del enlace
-    (async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession()
+  // --- Verificación de enlace usando token_hash (NO PKCE, NO exchangeCodeForSession)
+  (async () => {
+    try {
+      const url = new URL(window.location.href)
 
-        if (!session) {
-          // Si no hay sesión, damos por usado/caducado
-          $hint.classList.add('hidden')
-          $used.classList.remove('hidden')
-          return
+      const errCode = url.searchParams.get('error_code')
+      const errDesc = url.searchParams.get('error_description')
+      if (errCode || errDesc) {
+        throw new Error(`${errCode || 'error'}: ${errDesc || ''}`.trim())
+      }
+
+      const token_hash = url.searchParams.get('token_hash')
+      const type = url.searchParams.get('type') || 'recovery'
+
+      if (!token_hash) {
+        // Si no viene token_hash, damos el enlace por inválido/caducado
+        $hint.classList.add('hidden')
+        $used.classList.remove('hidden')
+        return
+      }
+
+      const { data, error } = await supabase.auth.verifyOtp({
+        token_hash,
+        type,   // "recovery"
+      })
+
+      if (error) throw error
+      if (!data?.session) {
+        throw new Error('No se pudo iniciar sesión para cambiar la contraseña.')
+      }
+
+      // Enlace OK → mostramos formulario
+      $hint.classList.add('hidden')
+      $badge.classList.remove('hidden')
+      $form.classList.remove('hidden')
+    } catch (e) {
+      console.error(e)
+
+      $hint.classList.add('hidden')
+      $badge.classList.add('hidden')
+      $form.classList.add('hidden')
+      $done.classList.add('hidden')
+      $err.classList.add('hidden')
+      $used.classList.add('hidden')
+
+      let isUsed = false
+      if (typeof e.message === 'string') {
+        const m = e.message.toLowerCase()
+        if (
+          m.includes('invalid or has expired') ||
+          m.includes('expired') ||
+          m.includes('invalid token') ||
+          m.includes('recovery')
+        ) {
+          isUsed = true
         }
+      }
 
-        // OK -> mostramos el formulario
-        $hint.classList.add('hidden')
-        $badge.classList.remove('hidden')
-        $form.classList.remove('hidden')
-      } catch (e) {
-        console.error(e)
-        $hint.classList.add('hidden')
+      if (isUsed) {
+        $used.classList.remove('hidden')
+      } else {
         $err.textContent = 'No se pudo validar el enlace. Solicita uno nuevo desde la app.'
         $err.classList.remove('hidden')
       }
-    })();
-
-    // Envío del formulario
-    $form.addEventListener('submit', async (ev) => {
-      ev.preventDefault()
-      $err.classList.add('hidden')
-
-      const p1 = document.getElementById('pass1').value.trim()
-      const p2 = document.getElementById('pass2').value.trim()
-      if (p1 !== p2) return showError('Las contraseñas no coinciden.')
-      if (p1.length < 6) return showError('Mínimo 6 caracteres.')
-
-      try {
-        const { error } = await supabase.auth.updateUser({ password: p1 })
-        if (error) throw error
-        $form.classList.add('hidden')
-        $done.classList.remove('hidden')
-        setTimeout(() => window.location.assign(REDIRECT_AFTER_OK), 1200)
-      } catch (e) {
-        showError(e.message || 'No se pudo actualizar la contraseña.')
-      }
-    })
-
-    function showError(msg){
-      $err.textContent = msg;
-      $err.classList.remove('hidden');
     }
-  </script>
-</body>
-</html>
+  })();
+
+  // --- Envío del formulario
+  $form.addEventListener('submit', async (ev) => {
+    ev.preventDefault()
+    $err.classList.add('hidden')
+    const p1 = document.getElementById('pass1').value.trim()
+    const p2 = document.getElementById('pass2').value.trim()
+    if (p1 !== p2) return showError('Las contraseñas no coinciden.')
+    if (p1.length < 6) return showError('Mínimo 6 caracteres.')
+
+    try {
+      const { error } = await supabase.auth.updateUser({ password: p1 })
+      if (error) throw error
+      $form.classList.add('hidden')
+      $done.classList.remove('hidden')
+      setTimeout(() => window.location.assign(REDIRECT_AFTER_OK), 1200)
+    } catch (e) {
+      showError(e.message || 'No se pudo actualizar la contraseña.')
+    }
+  })
+
+  function showError(msg){
+    $err.textContent = msg;
+    $err.classList.remove('hidden');
+  }
+</script>
