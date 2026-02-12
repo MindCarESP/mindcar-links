@@ -269,7 +269,7 @@
 
     // Muestra info útil del enlace compartido (sin backend, solo UI)
     // Ejemplos:
-    //   /compartir?item=123
+    //   /compartir?ad=123
     //   /compartir/coche/123?utm=...
     const sharedInfo = document.getElementById("sharedInfo");
     const url = new URL(window.location.href);
@@ -277,12 +277,12 @@
     const path = url.pathname;
     const params = url.searchParams;
 
-    // Si hay "item" o similar, lo enseñamos.
-    const item = params.get("item") || params.get("id") || "";
+    // Si hay "ad" o similar, lo enseñamos.
+    const ad = params.get("ad") || params.get("id") || params.get("ad") || "";
     const ref = params.get("ref") || "";
 
     let msg = "";
-    if (item) msg += `Contenido compartido: #${item}. `;
+    if (ad) msg += `Contenido compartido: #${ad}. `;
     if (ref) msg += `Ref: ${ref}. `;
     if (!msg && path && path !== "/compartir" && path !== "/compartir/") {
       msg = `Contenido compartido: ${path.replace("/compartir", "")}`;
