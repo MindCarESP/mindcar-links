@@ -11,7 +11,7 @@
   <meta property="og:description" content="Este enlace se abrirá en la app. Si no la tienes, estamos en construcción." />
   <meta property="og:type" content="website" />
   <!-- Cambia a tu URL real -->
-  <meta property="og:url" content="https://mindcar.es/compartir" />
+  <meta property="og:url" content="https://mindcar.es/share" />
   <!-- Si tienes imagen de preview, ponla aquí -->
   <!-- <meta property="og:image" content="https://mindcar.es/assets/og-share.png" /> -->
 
@@ -263,40 +263,86 @@
     </footer>
   </main>
 
-  <script>
+    <script>
     // Año automático
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Muestra info útil del enlace compartido (sin backend, solo UI)
-    // Ejemplos:
-    //   /compartir?ad=123
-    //   /compartir/coche/123?utm=...
+    // ---------------------------
+    // 1) Leer parámetros del link
+    // ---------------------------
     const sharedInfo = document.getElementById("sharedInfo");
     const url = new URL(window.location.href);
-
-    const path = url.pathname;
     const params = url.searchParams;
 
-    // Si hay "ad" o similar, lo enseñamos.
-    const ad = params.get("ad") || params.get("id") || params.get("ad") || "";
+    // parámetro canónico: ad
+    // fallback: id / item por compatibilidad
+    const ad = params.get("ad") || params.get("id") || params.get("item") || "";
     const ref = params.get("ref") || "";
 
+    // ---------------------------
+    // 2) Mostrar info (UI)
+    // ---------------------------
     let msg = "";
-    if (ad) msg += `Contenido compartido: #${ad}. `;
+    if (ad) msg += `Anuncio compartido: #${ad}. `;
     if (ref) msg += `Ref: ${ref}. `;
-    if (!msg && path && path !== "/compartir" && path !== "/compartir/") {
-      msg = `Contenido compartido: ${path.replace("/compartir", "")}`;
-    }
-
     if (msg) sharedInfo.textContent = msg;
 
-    // CTA: aquí puedes decidir a dónde mandar al usuario.
-    // Ahora mismo va a la home (/). Puedes cambiarlo a:
-    // - /apoyar
-    // - /espera
-    // - un formulario
-    // - Play Store / App Store cuando toque
-    // document.getElementById("primaryCta").href = "/apoyar";
+    // ---------------------------
+    // 3) Deep link (beta sin Store)
+    // ---------------------------
+    // OJO: ahora mismo tu app NO tiene scheme custom configurado.
+    // Si quieres hacerlo por scheme, tendrás que añadirlo en Android/iOS (Paso 3).
+    // Si prefieres hacerlo por HTTPS App Links (recomendado), te lo monto en el Paso 3
+    // y entonces aquí ni haría falta esto.
+    const ANDROID_PACKAGE = "com.mindcar.code"; // ✅ según tu build.gradle.kts
+    const APP_SCHEME = "mindcar";               // cámbialo si usas otro
+
+    function isAndroid(){ return /Android/i.test(navigator.userAgent); }
+    function isiOS(){ return /iPhone|iPad|iPod/i.test(navigator.userAgent); }
+
+    function buildDeepLink(id){
+      return id ? `${APP_SCHEME}://ad/${encodeURIComponent(id)}` : `${APP_SCHEME}://home`;
+    }
+
+    function buildAndroidIntent(id){
+      const path = id ? `ad/${encodeURIComponent(id)}` : "home";
+      return `intent://${path}#Intent;scheme=${APP_SCHEME};package=${ANDROID_PACKAGE};end`;
+    }
+
+    function tryOpenApp(){
+      if (!ad) return;
+
+      if (sharedInfo) {
+        sharedInfo.textContent = `Anuncio compartido: #${ad}. Intentando abrir la app…`;
+      }
+
+      const start = Date.now();
+
+      if (isAndroid()){
+        window.location.href = buildAndroidIntent(ad);
+      } else {
+        window.location.href = buildDeepLink(ad);
+      }
+
+      setTimeout(() => {
+        if (Date.now() - start >= 1100) {
+          if (sharedInfo) {
+            sharedInfo.textContent = `Anuncio compartido: #${ad}. No parece que tengas la app instalada (beta).`;
+          }
+        }
+      }, 1200);
+    }
+
+    // ---------------------------
+    // 4) CTA: reintentar abrir app
+    // ---------------------------
+    const cta = document.getElementById("primaryCta");
+    if (cta && ad) {
+      cta.href = buildDeepLink(ad);
+    }
+
+    // Auto-intento al cargar (solo si viene ?ad=...)
+    tryOpenApp();
   </script>
 </body>
 </html>
