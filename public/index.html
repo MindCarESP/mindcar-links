@@ -5,183 +5,415 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MindCar — Tu primera historia | Buscador de coches</title>
 
-  <meta name="description" content="La app creada por y para los amantes del motor. Porque los coches no son de segunda mano: son tu primera historia. Estamos construyendo el buscador más funcional para comprar y vender coches.">
-  <meta name="theme-color" content="#0b1220">
-  <meta property="og:title" content="MindCar — Tu primera historia">
-  <meta property="og:description" content="Estamos construyendo el buscador más funcional para comprar y vender coches: rápido, claro y útil.">
-  <meta property="og:image" content="/logo-full.png">
-  <meta property="og:type" content="website">
-  <link rel="icon" href="/logo_sf_.svg" sizes="any">
+  <meta
+    name="description"
+    content="La app creada por y para los amantes del motor. Porque los coches no son de segunda mano: son tu primera historia. Estamos construyendo el buscador más funcional para comprar y vender coches."
+  />
+  <meta name="theme-color" content="#0f172a" />
+  <meta property="og:title" content="MindCar — Tu primera historia" />
+  <meta
+    property="og:description"
+    content="Estamos construyendo el buscador más funcional para comprar y vender coches: rápido, claro y útil."
+  />
+  <meta property="og:image" content="/logo-full.png" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="/logo_sf_.svg" sizes="any" />
 
   <style>
-    :root{
-      --bg:#0b1220; --ink:#e8f1ff; --muted:#a6b9d4;
-      --brand:#10b981; --brand-2:#06b6d4;
-      --card:#102332;
-      --stroke:#0f2a3a; 
-      --shadow: 0 10px 30px rgba(0,0,0,.25);
-      --radius: 18px;
-    }
-    /* Reinicio básico más limpio y semántico */
-    *, *::before, *::after {box-sizing:border-box} 
-    html, body {height:100%; margin: 0; padding: 0;}
-    
-    body{
-      color:var(--ink);
-      /* background: linear-gradient(180deg, #0a1622 0%, #0c1826 40%, #0b1220 100%);  Mejor simplificar o usar la variable en el fondo principal */
-      background-color: var(--bg);
-      background-image: linear-gradient(180deg, #0a1622 0%, #0c1826 40%, #0b1220 100%);
-      font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif; /* Mejor añadir fallback genérico */
-      line-height:1.6; /* Un poco más de line-height para legibilidad */
-      text-align:center;
-    }
-    .wrap{
-      max-width:960px;
-      padding:clamp(16px, 3vw, 24px);
-      margin-inline:auto;
+    :root {
+      /* Base parecida a una app moderna */
+      --bg: #0b1220;
+      --bg-2: #111827;
+      --surface: rgba(255, 255, 255, 0.06);
+      --surface-strong: rgba(255, 255, 255, 0.09);
+      --surface-soft: rgba(255, 255, 255, 0.04);
+
+      --stroke: rgba(255, 255, 255, 0.10);
+      --stroke-strong: rgba(255, 255, 255, 0.14);
+
+      --text: #f8fafc;
+      --text-soft: #cbd5e1;
+      --text-muted: #94a3b8;
+
+      --primary: #10b981;
+      --primary-strong: #059669;
+      --primary-soft: rgba(16, 185, 129, 0.12);
+
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+
+      --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.38);
+      --shadow-md: 0 14px 34px rgba(0, 0, 0, 0.24);
+      --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.16);
     }
 
-    /* Imagen Logo - Se mantiene centrado y accesible */
-    .logo-full{
-      display:block; /* Asegura que la imagen se comporte como un bloque para centrar mejor */
-      width:min(340px, 75%);
-      margin:40px auto 20px;
-      filter: drop-shadow(0 0 10px rgba(0,0,0,.35));
-      transition: transform .25s ease;
-    }
-    .logo-full:hover{ transform:scale(1.02) }
-
-    /* Estilos de Contenedor General (Claim/Note) */
-    .content-box{
-      background: var(--card);
-      border:1px solid var(--stroke);
-      border-radius: var(--radius);
-      padding: clamp(20px,3vw,28px);
-      box-shadow: var(--shadow);
-      max-width:700px;
-      margin-inline:auto;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
     }
 
-    /* Estilos Específicos del Claim */
-    .claim{
-      margin-top:10px;
-      display:grid;
-      gap:12px;
-    }
-    .claim h1{ /* Cambiado de h2 a h1 por semántica */
-      font-size: clamp(22px, 3.2vw, 34px); 
-      font-weight:800; 
-      margin:0;
-    }
-    .claim p{
-      color:var(--muted); 
-      max-width:66ch; 
-      margin:6px auto 0;
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
     }
 
-    .support-cta{ margin-top:22px; display:flex; justify-content:center }
-    .btn-support{
-      appearance:none; border: 3px solid #0b3a35; cursor:pointer;
-      padding:16px 26px; border-radius:16px;
-      font-weight:900; font-size:clamp(16px, 2.2vw, 21px);
-      color:#06141a; text-decoration:none;
-      background: linear-gradient(135deg, var(--brand), var(--brand-2));
-      box-shadow: 0 6px 16px rgba(0,0,0,.35);
-      transition: transform .12s ease, filter .12s ease;
-      display: inline-block; /* Para asegurar el comportamiento correcto en flex/grid */
-    }
-    .btn-support:hover{ transform: translateY(-2px) }
-    .btn-support:active{ transform: translateY(0) scale(.99) }
-
-    .note{
-      margin-top:28px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.6;
-    }
-    /* Estilo para el icono/texto dentro de la nota */
-    .note strong {
-        color: var(--ink); /* Mejorar el contraste del texto clave */
-    }
-    
-    /* Footer */
-    footer{
-      margin:32px auto 8px;
-      color:var(--muted);
-      font-size:13px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      max-width:700px;
-      padding:0 8px;
+    body {
+      font-family: Inter, Poppins, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(16, 185, 129, 0.10), transparent 28%),
+        linear-gradient(180deg, #0b1220 0%, #0f172a 48%, #0b1220 100%);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
-    footer a{
-      color:var(--brand);
-      text-decoration:none;
-      font-weight:500;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      transition: color .2s ease;
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 16px;
     }
-    footer a:hover{ color:var(--brand-2); }
 
-    /* SVG en Footer */
-    footer svg{
-      width:15px; height:15px;
-      fill:var(--brand);
-      transition: fill .2s ease;
-      flex-shrink: 0; /* Evita que el SVG se comprima en pantallas muy pequeñas */
+    .shell {
+      width: 100%;
+      max-width: 760px;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--stroke);
+      border-radius: 32px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
     }
-    footer a:hover svg{ fill:var(--brand-2); }
+
+    .topbar {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--stroke);
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .grabber {
+      width: 44px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      margin: 0 auto;
+    }
+
+    .content {
+      padding: clamp(18px, 3vw, 28px);
+    }
+
+    .hero-card,
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero-card {
+      padding: clamp(20px, 3vw, 30px);
+    }
+
+    .brand-lockup {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .logo-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo-full {
+      width: min(290px, 78%);
+      display: block;
+      filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.28));
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: #d1fae5;
+      border: 1px solid rgba(16, 185, 129, 0.22);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-size: clamp(28px, 4.5vw, 42px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .accent {
+      color: var(--primary);
+    }
+
+    .lead {
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: center;
+      font-size: clamp(16px, 2vw, 18px);
+      color: var(--text-soft);
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .btn-primary {
+      appearance: none;
+      border: none;
+      outline: none;
+      text-decoration: none;
+      cursor: pointer;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      min-height: 56px;
+      padding: 0 24px;
+      border-radius: 16px;
+
+      background: var(--primary);
+      color: white;
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+
+      box-shadow: 0 10px 22px rgba(16, 185, 129, 0.25);
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-strong);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(16, 185, 129, 0.28);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .info-card {
+      padding: 18px 18px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .info-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-soft);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      color: var(--primary);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .info-text strong {
+      display: block;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .info-text p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 15px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 4px 2px;
+      color: var(--text-muted);
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.16s ease;
+    }
+
+    .footer a:hover {
+      opacity: 0.85;
+    }
+
+    .footer svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 10px;
+      }
+
+      .shell {
+        border-radius: 24px;
+      }
+
+      .content {
+        padding: 14px;
+      }
+
+      .hero-card {
+        padding: 18px 16px;
+      }
+
+      .footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .btn-primary {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <main class="wrap">
-    <img 
-      src="/logo-full-app.svg" 
-      alt="MindCar logo" 
-      class="logo-full" 
-      role="img" 
-      aria-label="MindCar, Tu primera historia"
-    />
+  <main class="page">
+    <section class="shell" aria-label="Presentación de MindCar">
+      <div class="topbar">
+        <div class="grabber" aria-hidden="true"></div>
+      </div>
 
-    <section class="claim content-box">
-      <h1>Porque los coches no son “de segunda mano”, <span style="color:var(--brand)">son tu primera historia</span>.</h1>
-      <p>Estamos construyendo el <strong>buscador más funcional</strong> para comprar y vender coches: rápido, claro y útil.</p>
+      <div class="content">
+        <section class="hero-card">
+          <div class="brand-lockup">
+            <div class="logo-wrap">
+              <img
+                src="/logo-full-app.svg"
+                alt="MindCar logo"
+                class="logo-full"
+              />
+            </div>
 
-      <div class="support-cta">
-        <a 
-          class="btn-support" 
-          href="https://paypal.me/MindCar" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          aria-label="Apoyar el desarrollo de MindCar con una donación en PayPal"
-        >
-          🚀 Apoyar MindCar
-        </a>
+            <div class="badge">⚙️ Proyecto en desarrollo</div>
+          </div>
+
+          <h1>
+            Porque los coches no son “de segunda mano”,
+            <span class="accent">son tu primera historia</span>
+          </h1>
+
+          <p class="lead">
+            Estamos construyendo el <strong>buscador más funcional</strong> para comprar y vender coches:
+            rápido, claro y útil.
+          </p>
+
+          <div class="hero-actions">
+            <a
+              class="btn-primary"
+              href="https://paypal.me/MindCar"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Apoyar el desarrollo de MindCar con una donación en PayPal"
+            >
+              🚀 Apoyar MindCar
+            </a>
+          </div>
+        </section>
+
+        <section class="stack">
+          <article class="info-card">
+            <div class="info-row">
+              <div class="info-icon">⏳</div>
+              <div class="info-text">
+                <strong>Aún no está disponible públicamente</strong>
+                <p>
+                  MindCar sigue en construcción. La base ya está en marcha, pero todavía estamos afinando
+                  la experiencia para que salga bien, no a medias.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="info-card">
+            <div class="info-row">
+              <div class="info-icon">🧠</div>
+              <div class="info-text">
+                <strong>Una app hecha con cabeza</strong>
+                <p>
+                  La idea no es meter ruido: la idea es crear una herramienta realmente útil para buscar,
+                  comparar y entender coches de forma más clara.
+                </p>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <footer class="footer">
+          <div>© <span id="y"></span> MindCar</div>
+
+          <a href="mailto:mindcar@mindcar.es" aria-label="Enviar correo electrónico a MindCar">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 2-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
+            </svg>
+            mindcar@mindcar.es
+          </a>
+        </footer>
       </div>
     </section>
-
-    <div class="note content-box">
-      <p>
-        ⚙️ <strong>MindCar está en desarrollo:</strong> aún no está disponible públicamente, pero puedes seguir el proyecto y apoyar su crecimiento. Muy pronto podrás probar la app y descubrir una nueva forma de entender los coches.
-      </p>
-    </div>
-
-    <footer>
-      <div>© <span id="y"></span> MindCar</div>
-      <div>
-        <a href="mailto:mindcar@mindcar.es" aria-label="Enviar correo electrónico a MindCar">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 2-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
-          </svg>
-          mindcar@mindcar.es
-        </a>
-      </div>
-    </footer>
   </main>
 
   <script>
