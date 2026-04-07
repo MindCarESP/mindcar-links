@@ -21,7 +21,6 @@
 
   <style>
     :root {
-      /* Base parecida a una app moderna */
       --bg: #0b1220;
       --bg-2: #111827;
       --surface: rgba(255, 255, 255, 0.06);
@@ -223,6 +222,37 @@
       transform: translateY(0);
     }
 
+    .btn-secondary {
+      appearance: none;
+      border: 1px solid var(--stroke-strong);
+      outline: none;
+      text-decoration: none;
+      cursor: pointer;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      min-height: 52px;
+      padding: 0 20px;
+      border-radius: 16px;
+
+      background: var(--surface-strong);
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-1px);
+      border-color: rgba(16, 185, 129, 0.35);
+      background: rgba(255, 255, 255, 0.12);
+    }
+
     .stack {
       display: grid;
       gap: 14px;
@@ -267,6 +297,19 @@
       margin: 0;
       color: var(--text-soft);
       font-size: 15px;
+    }
+
+    .download-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .download-note {
+      margin: 12px 0 0;
+      color: var(--text-muted);
+      font-size: 14px;
     }
 
     .footer {
@@ -323,7 +366,8 @@
         align-items: flex-start;
       }
 
-      .btn-primary {
+      .btn-primary,
+      .btn-secondary {
         width: 100%;
       }
     }
@@ -396,6 +440,41 @@
                 <p>
                   La idea no es meter ruido: la idea es crear una herramienta realmente útil para buscar,
                   comparar y entender coches de forma más clara.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <article class="info-card">
+            <div class="info-row">
+              <div class="info-icon">📲</div>
+              <div class="info-text">
+                <strong>Descargas app MindCar</strong>
+                <p>
+                  Si estás probando la app en Android, puedes descargar aquí la última APK disponible.
+                </p>
+
+                <div class="download-actions">
+                  <a
+                    class="btn-primary"
+                    href="/downloads/mindcar-android.apk"
+                    download
+                    aria-label="Descargar APK de MindCar para Android"
+                  >
+                    Descargar APK
+                  </a>
+
+                  <a
+                    class="btn-secondary"
+                    href="mailto:mindcar@mindcar.es?subject=MindCar%20-%20Quiero%20probar%20la%20app"
+                    aria-label="Solicitar acceso o soporte de descarga"
+                  >
+                    Solicitar acceso
+                  </a>
+                </div>
+
+                <p class="download-note">
+                  Si ya tienes la app instalada, los enlaces compartidos de anuncios se abrirán directamente en MindCar.
                 </p>
               </div>
             </div>
