@@ -37,12 +37,9 @@
       --text-soft: #d5deea;
       --text-muted: #8ea1b8;
       --primary: #18c37e;
-      --primary-strong: #10a86a;
-      --primary-soft: rgba(24, 195, 126, 0.14);
       --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.42);
       --shadow-md: 0 18px 38px rgba(0, 0, 0, 0.24);
       --radius-xl: 34px;
-      --radius-lg: 22px;
     }
 
     * {
@@ -243,7 +240,7 @@
     .btn-subtitle {
       font-size: 13px;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.72);
+      color: rgba(255, 255, 255, 0.78);
     }
 
     .btn-primary {
@@ -259,16 +256,15 @@
     }
 
     .btn-secondary {
-      color: var(--text);
-      border: 1px solid var(--stroke-strong);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.05));
-      box-shadow: var(--shadow-md);
+      color: white;
+      border: 1px solid rgba(88, 196, 255, 0.32);
+      background: linear-gradient(180deg, #58c4ff 0%, #2793d9 100%);
+      box-shadow: 0 18px 34px rgba(48, 156, 224, 0.22);
     }
 
     .btn-secondary:hover {
       transform: translateY(-2px);
-      border-color: rgba(24, 195, 126, 0.34);
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+      box-shadow: 0 22px 40px rgba(48, 156, 224, 0.28);
     }
 
     .download-note {
@@ -373,6 +369,17 @@
         <div class="hero-actions">
           <a
             class="btn-primary"
+            href="https://github.com/MindCarESP/MindCarDownloads/releases/download/testing-latest/mindcar-testing.apk"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Descargar APK de MindCar para Android"
+          >
+            <span class="btn-title">Descargar APK</span>
+            <span class="btn-subtitle">Ultima build de testing para Android</span>
+          </a>
+
+          <a
+            class="btn-secondary"
             href="https://paypal.me/MindCar"
             target="_blank"
             rel="noopener noreferrer"
@@ -381,17 +388,7 @@
             <span class="btn-title">Apoyar MindCar</span>
             <span class="btn-subtitle">Ayudanos a acelerar el proyecto</span>
           </a>
-
-          <a
-            class="btn-secondary"
-            href="https://github.com/MindCarESP/MindCarDownloads/releases/download/testing-latest/app-release.apk"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Descargar APK de MindCar para Android"
-          >
-            <span class="btn-title">Descargar APK</span>
-            <span class="btn-subtitle">Ultima build de testing para Android</span>
-          </a>
+        </div>
 
         <p class="download-note">
           Ultima APK publica de testing para Android, actualizada automaticamente.
@@ -415,4 +412,4 @@
     document.getElementById("y").textContent = new Date().getFullYear();
   </script>
 </body>
-</html>
+</html> lo ves bien?
