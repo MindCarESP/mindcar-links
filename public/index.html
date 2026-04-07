@@ -1,312 +1,1035 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MindCar — Tu primera historia | Buscador de coches</title>
+import 'dart:convert';
+import 'dart:ui';
 
-  <meta
-    name="description"
-    content="La app creada por y para los amantes del motor. Porque los coches no son de segunda mano: son tu primera historia. Estamos construyendo el buscador más funcional para comprar y vender coches."
-  />
-  <meta name="theme-color" content="#0f172a" />
-  <meta property="og:title" content="MindCar — Tu primera historia" />
-  <meta
-    property="og:description"
-    content="Estamos construyendo el buscador más funcional para comprar y vender coches: rápido, claro y útil."
-  />
-  <meta property="og:image" content="/logo-full.png" />
-  <meta property="og:type" content="website" />
-  <link rel="icon" href="/logo_sf_.svg" sizes="any" />
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-  <style>
-    :root {
-      --stroke: rgba(255, 255, 255, 0.10);
-      --stroke-strong: rgba(255, 255, 255, 0.14);
-      --text: #f8fafc;
-      --text-soft: #cbd5e1;
-      --text-muted: #94a3b8;
-      --primary: #10b981;
-      --primary-strong: #059669;
-      --primary-soft: rgba(16, 185, 129, 0.12);
-      --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.38);
-      --shadow-md: 0 14px 34px rgba(0, 0, 0, 0.24);
+import '../core/formatters/phone_spacing_formatter.dart';
+import '../core/widget/app_snackbar.dart';
+import '../core/widget/empty_state_auth.dart';
+import '../routes/app_router.dart';
+
+const bool kShowDebugUserMenu = true;
+const String kAdsTableName = 'car_ad';
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  static const _accent = Color(0xFF10B981);
+  static const _accentStrong = Color(0xFF059669);
+  static const _bgTop = Color(0xFF0B1220);
+  static const _bgMid = Color(0xFF0F172A);
+  static const _bgBottom = Color(0xFF09111F);
+
+  Future<void> _openSupportEmail(BuildContext context) async {
+    final mailUri = Uri(
+      scheme: 'mailto',
+      path: 'info@mindcar.es',
+      queryParameters: const {
+        'subject': 'Consulta MindCar',
+      },
+    );
+
+    final gmailUri = Uri(
+      scheme: 'https',
+      host: 'mail.google.com',
+      path: '/mail/u/0/',
+      queryParameters: const {
+        'view': 'cm',
+        'fs': '1',
+        'to': 'info@mindcar.es',
+        'su': 'Consulta MindCar',
+      },
+    );
+
+    try {
+      final openedMail = await launchUrl(
+        mailUri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (openedMail) return;
+    } catch (_) {}
+
+    try {
+      final openedGmail = await launchUrl(
+        gmailUri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (openedGmail) return;
+    } catch (_) {}
+
+    if (context.mounted) {
+      context.showErrorSnack('No se pudo abrir el correo');
     }
+  }
 
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
+  Future<void> _showEditProfileDialog(
+    BuildContext context, {
+    required String currentName,
+    required String currentPhone,
+  }) async {
+    final supa = Supabase.instance.client;
 
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
-    }
+    String initialCountry = '+34';
+    String initialNumber = '';
+    final safePhone = currentPhone == 'Sin teléfono' ? '' : currentPhone;
 
-    body {
-      font-family: Inter, Poppins, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top, rgba(16, 185, 129, 0.10), transparent 28%),
-        linear-gradient(180deg, #0b1220 0%, #0f172a 48%, #0b1220 100%);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
+    if (safePhone.isNotEmpty) {
+      final cleaned = safePhone.replaceAll(RegExp(r'\s+'), '');
+      final reg = RegExp(r'^\+(\d{1,3})(\d{4,15})$');
 
-    .page {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 16px;
-    }
-
-    .content {
-      width: 100%;
-      max-width: 760px;
-    }
-
-    .hero-card {
-      background: rgba(15, 23, 42, 0.78);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--stroke);
-      border-radius: 28px;
-      box-shadow: var(--shadow-lg);
-      padding: clamp(20px, 3vw, 30px);
-    }
-
-    .brand-lockup {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-
-    .logo-wrap {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    .logo-full {
-      width: min(290px, 78%);
-      display: block;
-      filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.28));
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: var(--primary-soft);
-      color: #d1fae5;
-      border: 1px solid rgba(16, 185, 129, 0.22);
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-
-    h1 {
-      margin: 0;
-      text-align: center;
-      font-size: clamp(28px, 4.5vw, 42px);
-      line-height: 1.08;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-    }
-
-    .accent {
-      color: var(--primary);
-    }
-
-    .lead {
-      max-width: 620px;
-      margin: 16px auto 0;
-      text-align: center;
-      font-size: clamp(16px, 2vw, 18px);
-      color: var(--text-soft);
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .btn-primary,
-    .btn-secondary {
-      appearance: none;
-      outline: none;
-      text-decoration: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: min(100%, 520px);
-      gap: 10px;
-      min-height: 60px;
-      padding: 0 24px;
-      border-radius: 18px;
-      font-size: 17px;
-      font-weight: 900;
-      letter-spacing: 0.01em;
-      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
-    }
-
-    .btn-primary {
-      border: none;
-      background: var(--primary);
-      color: white;
-      box-shadow: 0 10px 22px rgba(16, 185, 129, 0.25);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-strong);
-      transform: translateY(-1px);
-      box-shadow: 0 14px 28px rgba(16, 185, 129, 0.28);
-    }
-
-    .btn-secondary {
-      border: 1px solid var(--stroke-strong);
-      background: rgba(255, 255, 255, 0.09);
-      color: var(--text);
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn-secondary:hover {
-      transform: translateY(-1px);
-      border-color: rgba(16, 185, 129, 0.35);
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      padding: 18px 4px 2px;
-      color: var(--text-muted);
-      font-size: 14px;
-      flex-wrap: wrap;
-    }
-
-    .footer a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: opacity 0.16s ease;
-    }
-
-    .footer a:hover {
-      opacity: 0.85;
-    }
-
-    .footer svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-      flex-shrink: 0;
-    }
-
-    @media (max-width: 640px) {
-      .page {
-        padding: 12px;
-      }
-
-      .hero-card {
-        border-radius: 22px;
-        padding: 18px 16px;
-      }
-
-      .btn-primary,
-      .btn-secondary {
-        width: 100%;
-      }
-
-      .footer {
-        flex-direction: column;
-        align-items: flex-start;
+      if (cleaned.startsWith('+34') && cleaned.length > 3) {
+        initialCountry = '+34';
+        initialNumber = cleaned.substring(3);
+      } else if (reg.hasMatch(cleaned)) {
+        final m = reg.firstMatch(cleaned)!;
+        initialCountry = '+${m.group(1)!}';
+        initialNumber = m.group(2)!;
+      } else if (cleaned.startsWith('+') && cleaned.length > 3) {
+        initialCountry = cleaned.substring(0, 3);
+        initialNumber = cleaned.substring(3);
+      } else {
+        initialNumber = cleaned.replaceAll(RegExp(r'\D'), '');
       }
     }
-  </style>
-</head>
 
-<body>
-  <main class="page">
-    <div class="content">
-      <section class="hero-card" aria-label="Presentación de MindCar">
-        <div class="brand-lockup">
-          <div class="logo-wrap">
-            <img
-              src="/logo-full-app.svg"
-              alt="MindCar logo"
-              class="logo-full"
-            />
-          </div>
+    final nameController = TextEditingController(text: currentName);
+    final countryController = TextEditingController(text: initialCountry);
+    final phoneController = TextEditingController(
+      text: formatEsLocalNumberForInput(initialNumber),
+    );
 
-          <div class="badge">⚙️ Proyecto en desarrollo</div>
-        </div>
+    await showDialog<void>(
+      context: context,
+      barrierColor: Colors.black.withOpacity(0.55),
+      builder: (ctx) {
+        final theme = Theme.of(ctx);
+        final cs = theme.colorScheme;
 
-        <h1>
-          Porque los coches no son “de segunda mano”,
-          <span class="accent">son tu primera historia</span>
-        </h1>
+        InputDecoration dec({
+          String? label,
+          String? hint,
+          IconData? icon,
+        }) {
+          return InputDecoration(
+            labelText: label,
+            hintText: hint,
+            prefixIcon: icon != null ? Icon(icon, size: 20) : null,
+            filled: true,
+            fillColor: Colors.white.withOpacity(0.04),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            labelStyle: theme.textTheme.bodyMedium?.copyWith(
+              color: Colors.white.withOpacity(0.82),
+              fontWeight: FontWeight.w600,
+            ),
+            hintStyle: theme.textTheme.bodyMedium?.copyWith(
+              color: Colors.white.withOpacity(0.35),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.08)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.08)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: const BorderSide(color: _accent, width: 1.4),
+            ),
+          );
+        }
 
-        <p class="lead">
-          Estamos construyendo el <strong>buscador más funcional</strong> para comprar y vender coches:
-          rápido, claro y útil.
-        </p>
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 16),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+              child: Container(
+                width: 460,
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0F172A).withOpacity(0.88),
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(color: Colors.white.withOpacity(0.10)),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 40,
+                      offset: Offset(0, 20),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: _accent.withOpacity(0.14),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: const Icon(
+                            Icons.edit_rounded,
+                            color: _accent,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Editar perfil',
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    TextField(
+                      controller: nameController,
+                      textInputAction: TextInputAction.next,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: dec(
+                        label: 'Nombre',
+                        hint: 'Tu nombre',
+                        icon: Icons.person_rounded,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 96,
+                          child: TextField(
+                            controller: countryController,
+                            keyboardType: TextInputType.phone,
+                            textInputAction: TextInputAction.next,
+                            style: const TextStyle(color: Colors.white),
+                            decoration: dec(
+                              label: 'Prefijo',
+                              hint: '+34',
+                              icon: Icons.flag_outlined,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TextField(
+                            controller: phoneController,
+                            keyboardType: TextInputType.phone,
+                            style: const TextStyle(color: Colors.white),
+                            inputFormatters: const [
+                              EsPhoneSpacingFormatter(),
+                            ],
+                            decoration: dec(
+                              label: 'Teléfono',
+                              hint: '600 123 456',
+                              icon: Icons.phone_outlined,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.of(ctx).pop(),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              side: BorderSide(
+                                color: Colors.white.withOpacity(0.12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: const Text(
+                              'Cancelar',
+                              style: TextStyle(fontWeight: FontWeight.w800),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: FilledButton(
+                            onPressed: () async {
+                              final user = supa.auth.currentUser;
+                              if (user == null) {
+                                Navigator.of(ctx).pop();
+                                if (context.mounted) {
+                                  context.showErrorSnack(
+                                    'Sesión no válida, vuelve a iniciar sesión.',
+                                  );
+                                }
+                                return;
+                              }
 
-        <div class="hero-actions">
-          <a
-            class="btn-primary"
-            href="https://paypal.me/MindCar"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Apoyar el desarrollo de MindCar con una donación en PayPal"
-          >
-            Apoyar MindCar
-          </a>
+                              final newName = nameController.text.trim();
+                              final newCountry =
+                                  normalizeCountryCode(countryController.text);
+                              final newNumber = phoneController.text
+                                  .replaceAll(RegExp(r'\D'), '');
 
-          <a
-            class="btn-secondary"
-            href="https://github.com/MindCarESP/MindCarFlutter/releases/download/testing-latest/mindcar-testing.apk"
-            aria-label="Descargar APK de MindCar para Android"
-          >
-            Descargar APK
-          </a>argar APK
-          </a>
-        </div>
-      </section>
+                              final fullPhone =
+                                  (newCountry.isEmpty && newNumber.isEmpty)
+                                      ? ''
+                                      : '$newCountry$newNumber';
 
-      <footer class="footer">
-        <div>© <span id="y"></span> MindCar</div>
+                              final displayName =
+                                  newName.isEmpty ? currentName : newName;
 
-        <a href="mailto:mindcar@mindcar.es" aria-label="Enviar correo electrónico a MindCar">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 2-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
-          </svg>
-          mindcar@mindcar.es
-        </a>
-      </footer>
-    </div>
-  </main>
+                              try {
+                                await supa.auth.updateUser(
+                                  UserAttributes(
+                                    data: {
+                                      'Display name': displayName,
+                                      'full_name': displayName,
+                                      'name': displayName,
+                                      'phone':
+                                          fullPhone.isEmpty ? null : fullPhone,
+                                    },
+                                  ),
+                                );
 
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
-</body>
-</html>
+                                await supa.auth.refreshSession();
+
+                                await supa.from(kAdsTableName).update({
+                                  'owner_name': displayName,
+                                  'owner_phone':
+                                      fullPhone.isEmpty ? null : fullPhone,
+                                }).eq('owner', user.id);
+
+                                if (context.mounted) {
+                                  Navigator.of(ctx).pop();
+                                  context.showSuccessSnack(
+                                    'Perfil actualizado',
+                                  );
+                                }
+                              } catch (e) {
+                                Navigator.of(ctx).pop();
+                                if (context.mounted) {
+                                  context.showErrorSnack(
+                                    'Error al actualizar: $e',
+                                  );
+                                }
+                              }
+                            },
+                            style: FilledButton.styleFrom(
+                              backgroundColor: _accent,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            child: const Text(
+                              'Guardar',
+                              style: TextStyle(fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<AuthState>(
+      stream: Supabase.instance.client.auth.onAuthStateChange,
+      builder: (context, snapshot) {
+        final supa = Supabase.instance.client;
+        final user = supa.auth.currentUser;
+
+        if (user == null) {
+          return EmptyStateAuth(
+            title: 'Inicia sesión para acceder a tu perfil',
+            subtitle:
+                'Desde aquí podrás ver y editar tu información personal y gestionar tus anuncios.',
+            onLogin: () async {
+              final ok = await context.push<bool>(AppRoutes.login);
+              if (ok == true && context.mounted) {
+                context.showSuccessSnack('Sesión iniciada');
+              }
+            },
+            onRegister: () => context.push(AppRoutes.register),
+          );
+        }
+
+        final md = user.userMetadata ?? {};
+
+        final name = (md['Display name'] ??
+                md['name'] ??
+                md['full_name'] ??
+                md['user_name'] ??
+                user.email?.split('@').first ??
+                'Usuario')
+            .toString()
+            .trim();
+
+        final rawPhoneFromMd =
+            (md['phone'] ?? md['telefono'] ?? md['phone_number'] ?? '')
+                .toString();
+
+        final rawPhone = rawPhoneFromMd.trim();
+        final phone =
+            rawPhone.isEmpty ? 'Sin teléfono' : formatPhoneForDisplay(rawPhone);
+        final email = user.email ?? 'Sin email';
+        final initials = _buildInitials(name);
+
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [_bgTop, _bgMid, _bgBottom],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: -100,
+                  left: -60,
+                  child: _GlowBlob(
+                    size: 240,
+                    color: _accent.withOpacity(0.14),
+                  ),
+                ),
+                Positioned(
+                  top: 120,
+                  right: -80,
+                  child: _GlowBlob(
+                    size: 220,
+                    color: Colors.white.withOpacity(0.04),
+                  ),
+                ),
+                SafeArea(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 560),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const SizedBox(height: 4),
+                            Text(
+                              'Mi perfil',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: -0.6,
+                                  ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Gestiona tu cuenta, tus datos y el soporte.',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: Colors.white.withOpacity(0.68),
+                                    fontSize: 15,
+                                  ),
+                            ),
+                            const SizedBox(height: 18),
+                            _ProfileHeroCard(
+                              name: name,
+                              email: email,
+                              initials: initials,
+                            ),
+                            const SizedBox(height: 16),
+                            _ProfileInfoCard(
+                              name: name,
+                              phone: phone,
+                              onEditPressed: () => _showEditProfileDialog(
+                                context,
+                                currentName: name,
+                                currentPhone: phone,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            if (kShowDebugUserMenu) ...[
+                              _ActionGlassCard(
+                                icon: Icons.developer_mode_rounded,
+                                title: 'Pantalla de depuración',
+                                subtitle: 'Ver JSON completo del usuario',
+                                onTap: () async {
+                                  try {
+                                    final res = await Supabase.instance.client
+                                        .auth
+                                        .getUser();
+                                    final map = res.user?.toJson();
+                                    final payload =
+                                        const JsonEncoder.withIndent('  ')
+                                            .convert(
+                                      map ?? {'msg': 'Usuario nulo'},
+                                    );
+
+                                    if (!context.mounted) return;
+
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => DebugUserScreen(
+                                          initialJson: payload,
+                                        ),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    context.showErrorSnack('Error: $e');
+                                  }
+                                },
+                              ),
+                              const SizedBox(height: 12),
+                            ],
+                            _ActionGlassCard(
+                              icon: Icons.help_outline_rounded,
+                              title: 'Ayuda',
+                              subtitle: 'Escribir a info@mindcar.es',
+                              onTap: () => _openSupportEmail(context),
+                            ),
+                            const SizedBox(height: 24),
+                            FilledButton.icon(
+                              onPressed: () async {
+                                await Supabase.instance.client.auth.signOut();
+                                if (!context.mounted) return;
+                                context.showSuccessSnack(
+                                  'Sesión cerrada correctamente',
+                                );
+                              },
+                              style: FilledButton.styleFrom(
+                                backgroundColor: const Color(0xFFDC2626),
+                                foregroundColor: Colors.white,
+                                minimumSize: const Size.fromHeight(56),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                              ),
+                              icon: const Icon(Icons.logout_rounded),
+                              label: const Text(
+                                'Cerrar sesión',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String _buildInitials(String name) {
+    if (name.trim().isEmpty) return 'U';
+    final parts = name.trim().split(RegExp(r'\s+'));
+    if (parts.length == 1) {
+      return parts.first.characters.take(2).toString().toUpperCase();
+    }
+    final first = parts.first.characters.first;
+    final last = parts.last.characters.first;
+    return (first + last).toUpperCase();
+  }
+}
+
+class _ProfileHeroCard extends StatelessWidget {
+  final String name;
+  final String email;
+  final String initials;
+
+  const _ProfileHeroCard({
+    required this.name,
+    required this.email,
+    required this.initials,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _GlassCard(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        children: [
+          Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: LinearGradient(
+                colors: [
+                  ProfileScreen._accent.withOpacity(0.22),
+                  Colors.white.withOpacity(0.06),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              border: Border.all(color: Colors.white.withOpacity(0.10)),
+            ),
+            child: Center(
+              child: Text(
+                initials,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: ProfileScreen._accent,
+                      fontWeight: FontWeight.w900,
+                    ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name.isEmpty ? 'Usuario' : name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.3,
+                      ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  email,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white.withOpacity(0.68),
+                        fontSize: 15,
+                      ),
+                ),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _MiniPill(
+                      icon: Icons.verified_user_rounded,
+                      text: 'Cuenta verificada',
+                    ),
+                    _MiniPill(
+                      icon: Icons.speed_rounded,
+                      text: 'MindCar',
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProfileInfoCard extends StatelessWidget {
+  final String name;
+  final String phone;
+  final VoidCallback onEditPressed;
+
+  const _ProfileInfoCard({
+    required this.name,
+    required this.phone,
+    required this.onEditPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _GlassCard(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+      child: Column(
+        children: [
+          _InfoRow(
+            icon: Icons.badge_outlined,
+            label: 'Nombre',
+            value: name,
+          ),
+          const SizedBox(height: 14),
+          Divider(color: Colors.white.withOpacity(0.08), height: 1),
+          const SizedBox(height: 14),
+          _InfoRow(
+            icon: Icons.phone_outlined,
+            label: 'Teléfono',
+            value: phone,
+          ),
+          const SizedBox(height: 16),
+          Align(
+            alignment: Alignment.centerRight,
+            child: FilledButton.icon(
+              onPressed: onEditPressed,
+              style: FilledButton.styleFrom(
+                backgroundColor: ProfileScreen._accent.withOpacity(0.14),
+                foregroundColor: ProfileScreen._accent,
+                elevation: 0,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              icon: const Icon(
+                Symbols.edit_square,
+                size: 22,
+                weight: 600,
+              ),
+              label: const Text(
+                'Editar datos',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ActionGlassCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  const _ActionGlassCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _GlassCard(
+      padding: EdgeInsets.zero,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: ProfileScreen._accent.withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  icon,
+                  color: ProfileScreen._accent,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.white.withOpacity(0.64),
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: Colors.white.withOpacity(0.55),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+
+  const _InfoRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: ProfileScreen._accent.withOpacity(0.12),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Icon(icon, color: ProfileScreen._accent),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Colors.white.withOpacity(0.56),
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _MiniPill extends StatelessWidget {
+  final IconData icon;
+  final String text;
+
+  const _MiniPill({
+    required this.icon,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: ProfileScreen._accent.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: ProfileScreen._accent.withOpacity(0.20),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: ProfileScreen._accent),
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: const Color(0xFFD1FAE5),
+                  fontWeight: FontWeight.w800,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GlassCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+
+  const _GlassCard({
+    required this.child,
+    this.padding = const EdgeInsets.all(16),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.06),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: Colors.white.withOpacity(0.10)),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black45,
+                blurRadius: 30,
+                offset: Offset(0, 16),
+              ),
+            ],
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class _GlowBlob extends StatelessWidget {
+  final double size;
+  final Color color;
+
+  const _GlowBlob({
+    required this.size,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      child: Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: color,
+              blurRadius: 120,
+              spreadRadius: 30,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DebugUserScreen extends StatelessWidget {
+  final String initialJson;
+
+  const DebugUserScreen({
+    super.key,
+    required this.initialJson,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0B1220),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF0F172A),
+        foregroundColor: Colors.white,
+        title: const Text('Debug usuario'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SelectableText(
+          initialJson,
+          style: const TextStyle(
+            fontFamily: 'monospace',
+            fontSize: 12,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+String normalizeCountryCode(String input) {
+  final t = input.trim();
+  if (t.isEmpty) return '';
+  final digits = t.replaceAll(RegExp(r'\D'), '');
+  if (digits.isEmpty) return '';
+  return '+$digits';
+}
+
+String formatEsLocalNumberForInput(String digits) {
+  final d = digits.replaceAll(RegExp(r'\D'), '');
+  if (d.isEmpty) return '';
+  final limited = d.length > 9 ? d.substring(0, 9) : d;
+  final buf = StringBuffer();
+  for (var i = 0; i < limited.length; i++) {
+    if (i == 3 || i == 6) buf.write(' ');
+    buf.write(limited[i]);
+  }
+  return buf.toString();
+}
+
+String formatPhoneForDisplay(String raw) {
+  final s = raw.trim();
+  if (s.isEmpty) return 'Sin teléfono';
+
+  final cleaned = s.replaceAll(RegExp(r'\s+'), '');
+
+  String cc;
+  String num;
+
+  if (cleaned.startsWith('+34')) {
+    cc = '+34';
+    num = cleaned.substring(3);
+  } else {
+    final m = RegExp(r'^\+(\d{1,3})(\d+)$').firstMatch(cleaned);
+    if (m == null) return raw;
+    cc = '+${m.group(1)!}';
+    num = m.group(2)!;
+  }
+
+  num = num.replaceAll(RegExp(r'\D'), '');
+
+  if (cc == '+34' && num.length == 9) {
+    return '$cc ${num.substring(0, 3)} ${num.substring(3, 6)} ${num.substring(6)}';
+  }
+
+  final chunks = <String>[];
+  for (var i = 0; i < num.length; i += 3) {
+    final end = (i + 3 < num.length) ? i + 3 : num.length;
+    chunks.add(num.substring(i, end));
+  }
+
+  return '$cc ${chunks.join(' ')}';
+}
