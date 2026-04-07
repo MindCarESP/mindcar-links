@@ -21,31 +21,17 @@
 
   <style>
     :root {
-      --bg: #0b1220;
-      --bg-2: #111827;
       --surface: rgba(255, 255, 255, 0.06);
-      --surface-strong: rgba(255, 255, 255, 0.09);
-      --surface-soft: rgba(255, 255, 255, 0.04);
-
       --stroke: rgba(255, 255, 255, 0.10);
       --stroke-strong: rgba(255, 255, 255, 0.14);
-
       --text: #f8fafc;
       --text-soft: #cbd5e1;
-      --text-muted: #94a3b8;
-
       --primary: #10b981;
       --primary-strong: #059669;
       --primary-soft: rgba(16, 185, 129, 0.12);
-
-      --radius-xl: 28px;
       --radius-lg: 22px;
-      --radius-md: 18px;
-      --radius-sm: 14px;
-
       --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.38);
       --shadow-md: 0 14px 34px rgba(0, 0, 0, 0.24);
-      --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.16);
     }
 
     *,
@@ -98,7 +84,6 @@
       background: rgba(255, 255, 255, 0.02);
       display: flex;
       align-items: center;
-      gap: 10px;
     }
 
     .grabber {
@@ -113,15 +98,11 @@
       padding: clamp(18px, 3vw, 28px);
     }
 
-    .hero-card,
-    .info-card {
+    .hero-card {
       background: var(--surface);
       border: 1px solid var(--stroke);
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-md);
-    }
-
-    .hero-card {
       padding: clamp(20px, 3vw, 30px);
     }
 
@@ -182,34 +163,36 @@
 
     .hero-actions {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
       margin-top: 24px;
     }
 
-    .btn-primary {
+    .btn-primary,
+    .btn-secondary {
       appearance: none;
-      border: none;
       outline: none;
       text-decoration: none;
       cursor: pointer;
-
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-
       min-height: 56px;
       padding: 0 24px;
       border-radius: 16px;
-
-      background: var(--primary);
-      color: white;
       font-size: 17px;
       font-weight: 900;
       letter-spacing: 0.01em;
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
 
+    .btn-primary {
+      border: none;
+      background: var(--primary);
+      color: white;
       box-shadow: 0 10px 22px rgba(16, 185, 129, 0.25);
-      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
     }
 
     .btn-primary:hover {
@@ -218,33 +201,10 @@
       box-shadow: 0 14px 28px rgba(16, 185, 129, 0.28);
     }
 
-    .btn-primary:active {
-      transform: translateY(0);
-    }
-
     .btn-secondary {
-      appearance: none;
       border: 1px solid var(--stroke-strong);
-      outline: none;
-      text-decoration: none;
-      cursor: pointer;
-
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-
-      min-height: 52px;
-      padding: 0 20px;
-      border-radius: 16px;
-
-      background: var(--surface-strong);
+      background: rgba(255, 255, 255, 0.09);
       color: var(--text);
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: 0.01em;
-
-      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
     }
 
     .btn-secondary:hover {
@@ -253,72 +213,13 @@
       background: rgba(255, 255, 255, 0.12);
     }
 
-    .stack {
-      display: grid;
-      gap: 14px;
-      margin-top: 16px;
-    }
-
-    .info-card {
-      padding: 18px 18px;
-    }
-
-    .info-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      text-align: left;
-    }
-
-    .info-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--primary-soft);
-      border: 1px solid rgba(16, 185, 129, 0.18);
-      color: var(--primary);
-      font-size: 18px;
-      font-weight: 800;
-    }
-
-    .info-text strong {
-      display: block;
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .info-text p {
-      margin: 0;
-      color: var(--text-soft);
-      font-size: 15px;
-    }
-
-    .download-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 16px;
-    }
-
-    .download-note {
-      margin: 12px 0 0;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-
     .footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 14px;
       padding: 18px 4px 2px;
-      color: var(--text-muted);
+      color: #94a3b8;
       font-size: 14px;
       flex-wrap: wrap;
     }
@@ -330,11 +231,6 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: opacity 0.16s ease;
-    }
-
-    .footer a:hover {
-      opacity: 0.85;
     }
 
     .footer svg {
@@ -413,72 +309,17 @@
               rel="noopener noreferrer"
               aria-label="Apoyar el desarrollo de MindCar con una donación en PayPal"
             >
-              🚀 Apoyar MindCar
+              Apoyar MindCar
+            </a>
+
+            <a
+              class="btn-secondary"
+              href="https://github.com/TU_USUARIO/TU_REPO_APP/releases/download/testing-latest/mindcar-android.apk"
+              aria-label="Descargar APK de MindCar para Android"
+            >
+              Descargar APK
             </a>
           </div>
-        </section>
-
-        <section class="stack">
-          <article class="info-card">
-            <div class="info-row">
-              <div class="info-icon">⏳</div>
-              <div class="info-text">
-                <strong>Aún no está disponible públicamente</strong>
-                <p>
-                  MindCar sigue en construcción. La base ya está en marcha, pero todavía estamos afinando
-                  la experiencia para que salga bien, no a medias.
-                </p>
-              </div>
-            </div>
-          </article>
-
-          <article class="info-card">
-            <div class="info-row">
-              <div class="info-icon">🧠</div>
-              <div class="info-text">
-                <strong>Una app hecha con cabeza</strong>
-                <p>
-                  La idea no es meter ruido: la idea es crear una herramienta realmente útil para buscar,
-                  comparar y entender coches de forma más clara.
-                </p>
-              </div>
-            </div>
-          </article>
-
-          <article class="info-card">
-            <div class="info-row">
-              <div class="info-icon">📲</div>
-              <div class="info-text">
-                <strong>Descargas app MindCar</strong>
-                <p>
-                  Si estás probando la app en Android, puedes descargar aquí la última APK disponible.
-                </p>
-
-                <div class="download-actions">
-                  <a
-                    class="btn-primary"
-                    href="/downloads/mindcar-android.apk"
-                    download
-                    aria-label="Descargar APK de MindCar para Android"
-                  >
-                    Descargar APK
-                  </a>
-
-                  <a
-                    class="btn-secondary"
-                    href="mailto:mindcar@mindcar.es?subject=MindCar%20-%20Quiero%20probar%20la%20app"
-                    aria-label="Solicitar acceso o soporte de descarga"
-                  >
-                    Solicitar acceso
-                  </a>
-                </div>
-
-                <p class="download-note">
-                  Si ya tienes la app instalada, los enlaces compartidos de anuncios se abrirán directamente en MindCar.
-                </p>
-              </div>
-            </div>
-          </article>
         </section>
 
         <footer class="footer">
