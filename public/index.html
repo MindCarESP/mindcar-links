@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MindCar | Tu primera historia</title>
+  <title>MindCar — Tu primera historia | Buscador de coches</title>
 
   <meta
     name="description"
-    content="MindCar es la app creada por y para amantes del motor. Estamos construyendo un buscador de coches más claro, rápido y útil para comprar y vender mejor."
+    content="La app creada por y para los amantes del motor. Porque los coches no son de segunda mano: son tu primera historia. Estamos construyendo el buscador más funcional para comprar y vender coches."
   />
-  <meta name="theme-color" content="#08121c" />
-  <meta property="og:title" content="MindCar | Tu primera historia" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta property="og:title" content="MindCar — Tu primera historia" />
   <meta
     property="og:description"
-    content="Estamos construyendo un buscador de coches más funcional: rápido, claro y útil."
+    content="Estamos construyendo el buscador más funcional para comprar y vender coches: rápido, claro y útil."
   />
   <meta property="og:image" content="/logo-full.png" />
   <meta property="og:type" content="website" />
@@ -21,34 +21,32 @@
 
   <style>
     :root {
-      --bg: #071018;
-      --bg-2: #0c1824;
-      --panel: rgba(9, 18, 28, 0.84);
-      --panel-2: rgba(255, 255, 255, 0.04);
-      --panel-3: rgba(255, 255, 255, 0.06);
+      /* Base parecida a una app moderna */
+      --bg: #0b1220;
+      --bg-2: #111827;
+      --surface: rgba(255, 255, 255, 0.06);
+      --surface-strong: rgba(255, 255, 255, 0.09);
+      --surface-soft: rgba(255, 255, 255, 0.04);
 
       --stroke: rgba(255, 255, 255, 0.10);
       --stroke-strong: rgba(255, 255, 255, 0.14);
 
-      --text: #f5fbff;
-      --text-soft: #c6d3df;
-      --text-muted: #8ba0b3;
+      --text: #f8fafc;
+      --text-soft: #cbd5e1;
+      --text-muted: #94a3b8;
 
-      --primary: #0fb784;
-      --primary-strong: #0a9a6f;
-      --primary-soft: rgba(15, 183, 132, 0.14);
+      --primary: #10b981;
+      --primary-strong: #059669;
+      --primary-soft: rgba(16, 185, 129, 0.12);
 
-      --accent: #6fd2ff;
-      --warning: #ffd166;
-
-      --radius-xl: 32px;
-      --radius-lg: 24px;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
       --radius-md: 18px;
       --radius-sm: 14px;
 
-      --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.42);
-      --shadow-lg: 0 18px 40px rgba(0, 0, 0, 0.28);
-      --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.18);
+      --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.38);
+      --shadow-md: 0 14px 34px rgba(0, 0, 0, 0.24);
+      --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.16);
     }
 
     *,
@@ -65,12 +63,11 @@
     }
 
     body {
-      font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: Inter, Poppins, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(15, 183, 132, 0.12), transparent 28%),
-        radial-gradient(circle at top right, rgba(111, 210, 255, 0.10), transparent 22%),
-        linear-gradient(180deg, #061018 0%, #0b1622 54%, #071018 100%);
+        radial-gradient(circle at top, rgba(16, 185, 129, 0.10), transparent 28%),
+        linear-gradient(180deg, #0b1220 0%, #0f172a 48%, #0b1220 100%);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
@@ -86,24 +83,14 @@
 
     .shell {
       width: 100%;
-      max-width: 980px;
-      background: var(--panel);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      max-width: 760px;
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--stroke);
-      border-radius: 34px;
-      box-shadow: var(--shadow-xl);
+      border-radius: 32px;
+      box-shadow: var(--shadow-lg);
       overflow: hidden;
-      position: relative;
-    }
-
-    .shell::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,0.05), transparent 20%, transparent 80%, rgba(255,255,255,0.03));
     }
 
     .topbar {
@@ -111,84 +98,75 @@
       border-bottom: 1px solid var(--stroke);
       background: rgba(255, 255, 255, 0.02);
       display: flex;
-      justify-content: center;
+      align-items: center;
+      gap: 10px;
     }
 
     .grabber {
       width: 44px;
       height: 5px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.18);
+      margin: 0 auto;
     }
 
     .content {
-      padding: clamp(18px, 3vw, 34px);
-      position: relative;
-      z-index: 1;
+      padding: clamp(18px, 3vw, 28px);
     }
 
-    .hero {
-      display: grid;
-      grid-template-columns: 1.25fr 0.95fr;
-      gap: 18px;
-      align-items: stretch;
-    }
-
-    .hero-main,
-    .hero-side,
+    .hero-card,
     .info-card {
-      border-radius: var(--radius-lg);
+      background: var(--surface);
       border: 1px solid var(--stroke);
-      background: var(--panel-2);
-      box-shadow: var(--shadow-lg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
     }
 
-    .hero-main {
-      padding: clamp(22px, 3vw, 34px);
+    .hero-card {
+      padding: clamp(20px, 3vw, 30px);
     }
 
-    .hero-side {
-      padding: 22px;
+    .brand-lockup {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      gap: 18px;
-      background:
-        linear-gradient(180deg, rgba(15, 183, 132, 0.08), rgba(255,255,255,0.03));
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
     }
 
-    .eyebrow {
+    .logo-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo-full {
+      width: min(290px, 78%);
+      display: block;
+      filter: drop-shadow(0 10px 26px rgba(0, 0, 0, 0.28));
+    }
+
+    .badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 10px 14px;
       border-radius: 999px;
       background: var(--primary-soft);
-      color: #d8fff3;
-      border: 1px solid rgba(15, 183, 132, 0.22);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .logo-wrap {
-      margin: 0 0 18px;
-    }
-
-    .logo-full {
-      width: min(320px, 82%);
-      display: block;
-      filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.3));
+      color: #d1fae5;
+      border: 1px solid rgba(16, 185, 129, 0.22);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(34px, 5vw, 56px);
-      line-height: 0.98;
+      text-align: center;
+      font-size: clamp(28px, 4.5vw, 42px);
+      line-height: 1.08;
       font-weight: 900;
-      letter-spacing: -0.04em;
-      max-width: 12ch;
+      letter-spacing: -0.03em;
     }
 
     .accent {
@@ -196,172 +174,124 @@
     }
 
     .lead {
-      margin: 18px 0 0;
-      max-width: 58ch;
-      color: var(--text-soft);
+      max-width: 620px;
+      margin: 16px auto 0;
+      text-align: center;
       font-size: clamp(16px, 2vw, 18px);
+      color: var(--text-soft);
     }
 
     .hero-actions {
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 26px;
+      justify-content: center;
+      margin-top: 24px;
     }
 
-    .btn {
+    .btn-primary {
       appearance: none;
       border: none;
       outline: none;
       text-decoration: none;
       cursor: pointer;
+
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
+
       min-height: 56px;
-      padding: 0 22px;
+      padding: 0 24px;
       border-radius: 16px;
-      font-size: 16px;
+
+      background: var(--primary);
+      color: white;
+      font-size: 17px;
       font-weight: 900;
       letter-spacing: 0.01em;
-      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, border-color 0.16s ease;
-    }
 
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #ffffff;
-      box-shadow: 0 12px 26px rgba(15, 183, 132, 0.24);
+      box-shadow: 0 10px 22px rgba(16, 185, 129, 0.25);
+      transition: transform 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
     }
 
     .btn-primary:hover {
       background: var(--primary-strong);
-      box-shadow: 0 16px 30px rgba(15, 183, 132, 0.28);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(16, 185, 129, 0.28);
     }
 
-    .btn-secondary {
-      background: rgba(255,255,255,0.04);
-      color: var(--text);
-      border: 1px solid var(--stroke-strong);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.07);
-      border-color: rgba(255,255,255,0.18);
-    }
-
-    .mini-kicker {
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-
-    .side-title {
-      margin: 6px 0 0;
-      font-size: 24px;
-      line-height: 1.1;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-    }
-
-    .side-copy {
-      margin: 10px 0 0;
-      color: var(--text-soft);
-      font-size: 15px;
-    }
-
-    .beta-box {
-      padding: 16px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--stroke);
-    }
-
-    .beta-box strong {
-      display: block;
-      font-size: 15px;
-      margin-bottom: 6px;
-    }
-
-    .beta-box p {
-      margin: 0;
-      color: var(--text-soft);
-      font-size: 14px;
+    .btn-primary:active {
+      transform: translateY(0);
     }
 
     .stack {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
       gap: 14px;
       margin-top: 16px;
     }
 
     .info-card {
-      padding: 18px;
-      background: var(--panel-3);
+      padding: 18px 18px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      text-align: left;
     }
 
     .info-icon {
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       border-radius: 14px;
+      flex: 0 0 auto;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 14px;
       background: var(--primary-soft);
-      border: 1px solid rgba(15, 183, 132, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.18);
       color: var(--primary);
       font-size: 18px;
-      font-weight: 900;
-    }
-
-    .info-card h3 {
-      margin: 0 0 8px;
-      font-size: 17px;
-      line-height: 1.15;
       font-weight: 800;
     }
 
-    .info-card p {
+    .info-text strong {
+      display: block;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .info-text p {
       margin: 0;
       color: var(--text-soft);
       font-size: 15px;
     }
 
     .footer {
-      margin-top: 18px;
-      padding: 18px 4px 2px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
+      gap: 14px;
+      padding: 18px 4px 2px;
       color: var(--text-muted);
       font-size: 14px;
+      flex-wrap: wrap;
     }
 
     .footer a {
       color: var(--primary);
       text-decoration: none;
-      font-weight: 800;
+      font-weight: 700;
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      transition: opacity 0.16s ease;
     }
 
     .footer a:hover {
-      opacity: 0.88;
+      opacity: 0.85;
     }
 
     .footer svg {
@@ -369,16 +299,6 @@
       height: 16px;
       fill: currentColor;
       flex-shrink: 0;
-    }
-
-    @media (max-width: 860px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-
-      .stack {
-        grid-template-columns: 1fr;
-      }
     }
 
     @media (max-width: 640px) {
@@ -394,14 +314,8 @@
         padding: 14px;
       }
 
-      .hero-main,
-      .hero-side,
-      .info-card {
-        border-radius: 20px;
-      }
-
-      .btn {
-        width: 100%;
+      .hero-card {
+        padding: 18px 16px;
       }
 
       .footer {
@@ -409,8 +323,8 @@
         align-items: flex-start;
       }
 
-      .logo-full {
-        width: min(260px, 88%);
+      .btn-primary {
+        width: 100%;
       }
     }
   </style>
@@ -424,10 +338,8 @@
       </div>
 
       <div class="content">
-        <section class="hero">
-          <article class="hero-main">
-            <div class="eyebrow">Beta en construcción</div>
-
+        <section class="hero-card">
+          <div class="brand-lockup">
             <div class="logo-wrap">
               <img
                 src="/logo-full-app.svg"
@@ -436,87 +348,62 @@
               />
             </div>
 
-            <h1>
-              Los coches no son “de segunda mano”,
-              <span class="accent">son tu primera historia</span>
-            </h1>
+            <div class="badge">⚙️ Proyecto en desarrollo</div>
+          </div>
 
-            <p class="lead">
-              MindCar nace para hacer la búsqueda de coche más simple, más clara y más útil.
-              Estamos construyendo una experiencia pensada para comprar y vender sin ruido, sin
-              vueltas innecesarias y con información que de verdad ayude.
-            </p>
+          <h1>
+            Porque los coches no son “de segunda mano”,
+            <span class="accent">son tu primera historia</span>
+          </h1>
 
-            <div class="hero-actions">
-              <a
-                class="btn btn-primary"
-                href="https://paypal.me/MindCar"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Apoyar el desarrollo de MindCar con una donación en PayPal"
-              >
-                Apoyar MindCar
-              </a>
+          <p class="lead">
+            Estamos construyendo el <strong>buscador más funcional</strong> para comprar y vender coches:
+            rápido, claro y útil.
+          </p>
 
-              <a
-                class="btn btn-secondary"
-                href="/mindcar-beta.apk"
-                download
-                aria-label="Descargar la versión beta APK de MindCar"
-              >
-                Descargar beta APK
-              </a>
-            </div>
-          </article>
-
-          <aside class="hero-side">
-            <div>
-              <div class="mini-kicker">Estado del proyecto</div>
-              <h2 class="side-title">Una app hecha con cabeza, no con prisa</h2>
-              <p class="side-copy">
-                La base ya está en marcha. Ahora estamos afinando experiencia, velocidad y claridad
-                para lanzar algo útil de verdad.
-              </p>
-            </div>
-
-            <div class="beta-box">
-              <strong>Acceso beta para Android</strong>
-              <p>
-                Si ya tienes una APK firmada, puedes ofrecerla desde esta misma página con descarga directa.
-                Ideal para pruebas cerradas o testers tempranos.
-              </p>
-            </div>
-          </aside>
+          <div class="hero-actions">
+            <a
+              class="btn-primary"
+              href="https://paypal.me/MindCar"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Apoyar el desarrollo de MindCar con una donación en PayPal"
+            >
+              🚀 Apoyar MindCar
+            </a>
+          </div>
         </section>
 
         <section class="stack">
           <article class="info-card">
-            <div class="info-icon">⏳</div>
-            <h3>Todavía no está abierta al público</h3>
-            <p>
-              MindCar sigue en desarrollo. Preferimos salir bien, con una propuesta sólida, antes que publicar algo a medias.
-            </p>
+            <div class="info-row">
+              <div class="info-icon">⏳</div>
+              <div class="info-text">
+                <strong>Aún no está disponible públicamente</strong>
+                <p>
+                  MindCar sigue en construcción. La base ya está en marcha, pero todavía estamos afinando
+                  la experiencia para que salga bien, no a medias.
+                </p>
+              </div>
+            </div>
           </article>
 
           <article class="info-card">
-            <div class="info-icon">🧠</div>
-            <h3>Funcionalidad por encima del ruido</h3>
-            <p>
-              La prioridad no es meter más pantallas: es crear una herramienta realmente útil para buscar, comparar y entender coches.
-            </p>
-          </article>
-
-          <article class="info-card">
-            <div class="info-icon">🚗</div>
-            <h3>Pensada para amantes del motor</h3>
-            <p>
-              No queremos un escaparate genérico. Queremos una app que se sienta hecha por gente que entiende lo que significa elegir coche.
-            </p>
+            <div class="info-row">
+              <div class="info-icon">🧠</div>
+              <div class="info-text">
+                <strong>Una app hecha con cabeza</strong>
+                <p>
+                  La idea no es meter ruido: la idea es crear una herramienta realmente útil para buscar,
+                  comparar y entender coches de forma más clara.
+                </p>
+              </div>
+            </div>
           </article>
         </section>
 
         <footer class="footer">
-          <div>© <span id="y"></span> MindCar. Todos los derechos reservados.</div>
+          <div>© <span id="y"></span> MindCar</div>
 
           <a href="mailto:mindcar@mindcar.es" aria-label="Enviar correo electrónico a MindCar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
